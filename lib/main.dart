@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,7 +40,6 @@ class MyHomePage extends StatefulWidget {
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
-
   final String title;
 
   @override
@@ -47,6 +48,19 @@ class MyHomePage extends StatefulWidget {
 
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  Future checkFirstSeen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool _firstTime = (prefs.getBool('firstTime') ?? false);
+
+    if (_firstTime) {
+      //create db
+    } else {
+      await prefs.setBool('firstTime', true);
+      //get db and get pointer
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {

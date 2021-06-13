@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
+import 'package:intl/intl.dart';
 class Spent {
   final DateTime date;
   final double amount;
@@ -11,9 +11,13 @@ class Spent {
     required this.amount
   });
 
+  static String dateToSQLFormat(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+  
   Map<String, dynamic> toMap() {
     return {
-      'date': date.toIso8601String(),
+      'date': dateToSQLFormat(date),
       'amountSpent': amount
     };
   }
@@ -91,7 +95,7 @@ class spentDatabase {
         'spent',
         columns: ['date','amountSpent'],
         where: 'date = ?',
-        whereArgs: [date.toIso8601String()]);
+        whereArgs: [Spent.dateToSQLFormat(date)]);
 
     if (map.isNotEmpty) {
       return Spent.fromMap(map.first);
@@ -110,7 +114,7 @@ class spentDatabase {
         'spent',
         newSpent.toMap(),
         where: 'date = ?',
-        whereArgs: [spent.date.toIso8601String()]
+        whereArgs: [Spent.dateToSQLFormat(spent.date)]
     );
   }
 

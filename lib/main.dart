@@ -1,7 +1,6 @@
 import 'package:broked/Database.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import  'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(MyApp());
@@ -51,7 +50,7 @@ class MyHomePage extends StatefulWidget {
 
 
 class _MyHomePageState extends State<MyHomePage> {
-
+/*
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _firstTime = (prefs.getBool('firstTime') ?? false);
@@ -63,6 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
       //get db and get pointer
     }
   }
+
+ */
 
 
   @override
@@ -105,29 +106,44 @@ class BrokeMain extends StatefulWidget {
 }
 
 class _BrokeMain extends State<BrokeMain> {
+
+  DateTime _date = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child : Column(
           children: <Widget> [
-            Row(
-              children : <Widget> [
-                Text("Day"),
-                SizedBox(width: 20),
-                Text("Month"),
-                SizedBox(width: 20),
-                Text("Year")
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
+            Text("${DateFormat('dd-MM-yyyy').format(_date)}"),
+            ElevatedButton(
+              onPressed: () {
+                showDatePicker(
+                    context: context,
+                    initialDate: _date,
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime.now()
+                ).then((date) => {
+                  setState(() {
+                    if (date != null) {
+                      _date = date;
+                    }
+                  })
+                });
+              }, child: Text("Pick a date"),
             ),
+
             //add space between widget
             SizedBox(height: 20),
             TextFormField(),
             //add space between widget
             SizedBox(height : 20),
             ElevatedButton(
-                onPressed: null,
+                onPressed: () async {
+                  spentDatabase.instance.insertAmount(
+                    Spent(date : _date, amount : 0000)
+                  );
+                },
                 child: Text("BROKE!"),
                 style : ElevatedButton.styleFrom(
                     primary: Colors.brown
@@ -152,6 +168,21 @@ class Analytics extends StatefulWidget {
 }
 
 class _Analytics extends State<Analytics> {
+
+  late double totalSpent;
+
+  @override
+  void initState() {
+    super.initState();
+
+    recalculate();
+  }
+
+
+  Future recalculate() async {
+    totalSpent = await spentDatabase.instance.getTotalSpending();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,8 +190,9 @@ class _Analytics extends State<Analytics> {
           child : Column(
             children: [
               Text("Analytics"),
-              Text("Total spent : ${spentDatabase.instance.getTotalSpending()}")
-            ]
+              Text("Total spent : $totalSpent")
+            ],
+            mainAxisAlignment: MainAxisAlignment.center
           )
         ),
     );

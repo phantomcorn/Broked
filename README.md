@@ -1,20 +1,12 @@
-# broked
-<<<<<<< HEAD
-I had problems tracking how I spent my money so I made a budget tracker app. This is written using Dart.
-=======
+This app was created in order to track budgets. 
+The creator had a curiousity whether his money actually disappeared into thin air so he created this app in order to test out the following theorem.
 
-A new Flutter project.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+To run this on xcode:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
->>>>>>> a7c6110... continued project
+1. go to broked directory
+2. run ```flutter build ios```
+3. launch on xcode
+4. run

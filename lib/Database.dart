@@ -64,6 +64,7 @@ class spentDatabase {
   Future<Database> _initDB(String filename) async {
     final dbPath = await getDatabasesPath();
     var path = join(dbPath, filename);
+    print('path = $path');
 
     return await openDatabase(path, version : 1, onCreate: _createDB);
   }

@@ -1,6 +1,8 @@
 import 'package:broked/Database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import "Database.dart";
 
 void main() {
   runApp(MyApp());
@@ -108,6 +110,7 @@ class BrokeMain extends StatefulWidget {
 class _BrokeMain extends State<BrokeMain> {
 
   DateTime _date = DateTime.now();
+  final amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -135,14 +138,19 @@ class _BrokeMain extends State<BrokeMain> {
 
             //add space between widget
             SizedBox(height: 20),
-            TextFormField(),
+            TextFormField(
+              controller: amountController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))],
+            ),
             //add space between widget
             SizedBox(height : 20),
             ElevatedButton(
                 onPressed: () async {
                   spentDatabase.instance.insertAmount(
-                    Spent(date : _date, amount : 0000)
+                    Spent(date : _date, amount : double.parse(amountController.text))
                   );
+                  amountController.clear();
                 },
                 child: Text("BROKE!"),
                 style : ElevatedButton.styleFrom(
@@ -157,6 +165,7 @@ class _BrokeMain extends State<BrokeMain> {
   }
 
 }
+
 
 
 class Analytics extends StatefulWidget {
@@ -174,7 +183,6 @@ class _Analytics extends State<Analytics> {
   @override
   void initState() {
     super.initState();
-
     recalculate();
   }
 

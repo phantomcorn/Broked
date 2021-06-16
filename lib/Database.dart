@@ -14,6 +14,7 @@ class Spent {
   static String dateToSQLFormat(DateTime date) {
     return DateFormat('yyyy-MM-dd').format(date);
   }
+
   
   Map<String, dynamic> toMap() {
     return {
@@ -24,7 +25,7 @@ class Spent {
 
   static Spent fromMap(Map<String, Object?> map) {
     return Spent(
-        date : map['date'] as DateTime,
+        date : DateTime.parse(map['date'] as String),
         amount : map['amountSpent'] as double);
   }
 
@@ -64,7 +65,6 @@ class spentDatabase {
   Future<Database> _initDB(String filename) async {
     final dbPath = await getDatabasesPath();
     var path = join(dbPath, filename);
-    print('path = $path');
 
     return await openDatabase(path, version : 1, onCreate: _createDB);
   }
@@ -121,14 +121,18 @@ class spentDatabase {
 
   Future<List<Spent>> getAll() async {
     final db = await instance.database;
-    final result = await db.query('spent');
+    final results = await db.query('spent');
 
-    return result.map((map) => Spent.fromMap(map)).toList();
+    for (Map<String,Object?> result in results) {
+      print('date  = ${result['date'] as String}');
+      print('amount = ${result['amountSpent']}');
+    }
+    return results.map((map) => Spent.fromMap(map)).toList();
   }
 
   Future<double> getTotalSpending() async {
     List<Spent> results = await getAll();
-
+    print('getting total spending');
     if (results.isEmpty) {
       return 0;
     }

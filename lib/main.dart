@@ -147,9 +147,13 @@ class _BrokeMain extends State<BrokeMain> {
             SizedBox(height : 20),
             ElevatedButton(
                 onPressed: () async {
-                  spentDatabase.instance.insertAmount(
-                    Spent(date : _date, amount : double.parse(amountController.text))
-                  );
+                  if (amountController.text != '') {
+                    spentDatabase.instance.insertAmount(
+                      Spent(
+                        date: _date,
+                        amount: double.parse(amountController.text))
+                    );
+                  }
                   amountController.clear();
                 },
                 child: Text("BROKE!"),

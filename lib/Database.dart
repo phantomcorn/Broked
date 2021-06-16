@@ -123,16 +123,11 @@ class spentDatabase {
     final db = await instance.database;
     final results = await db.query('spent');
 
-    for (Map<String,Object?> result in results) {
-      print('date  = ${result['date'] as String}');
-      print('amount = ${result['amountSpent']}');
-    }
     return results.map((map) => Spent.fromMap(map)).toList();
   }
 
   Future<double> getTotalSpending() async {
     List<Spent> results = await getAll();
-    print('getting total spending');
     if (results.isEmpty) {
       return 0;
     }

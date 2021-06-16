@@ -178,27 +178,23 @@ class Analytics extends StatefulWidget {
 
 class _Analytics extends State<Analytics> {
 
-  late double totalSpent;
-
-  @override
-  void initState() {
-    super.initState();
-    recalculate();
-  }
-
-
-  Future recalculate() async {
-    totalSpent = await spentDatabase.instance.getTotalSpending();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
           child : Column(
             children: [
-              Text("Analytics"),
-              Text("Total spent : $totalSpent")
+              Text("Analytics : "),
+              FutureBuilder(
+                future: spentDatabase.instance.getTotalSpending(),
+                builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                  if (snapshot.hasData) {
+                    return Text("Total spending : ${snapshot.data.toString()}");
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                }
+              ),
             ],
             mainAxisAlignment: MainAxisAlignment.center
           )

@@ -82,6 +82,7 @@ class spentDatabase {
   Future<void> insertAmount(Spent data) async {
     final db = await instance.database;
 
+
     final id = await db.insert(
         'spent',
         data.toMap(),
@@ -136,6 +137,22 @@ class spentDatabase {
     }
 
     return results.map((spent) => spent.amount)
+        .reduce((value, element) => value + element);
+  }
+
+  Future<double> getTotalSpendingYearly(int year) async {
+    final db = await instance.database;
+
+    final results = await db.rawQuery(
+        "SELECT * FROM spent WHERE strftime('%Y', date) = '$year'"
+    );
+
+    if (results.isEmpty) {
+      return 0;
+    }
+
+    return results.map((map) => Spent.fromMap(map).amount)
+        .toList()
         .reduce((value, element) => value + element);
   }
 

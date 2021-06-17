@@ -90,7 +90,7 @@ class spentDatabase {
 
   }
   
-  Future<Spent> readAmount(DateTime date) async {
+  Future<double> getSpendingByDate(DateTime date) async {
     final db = await instance.database;
     final map = await db.query(
         'spent',
@@ -98,17 +98,20 @@ class spentDatabase {
         where: 'date = ?',
         whereArgs: [Spent.dateToSQLFormat(date)]);
 
-    if (map.isNotEmpty) {
-      return Spent.fromMap(map.first);
-    } else {
-      throw Exception('No query exists from database');
+    for (Map<String, Object?> result in map) {
+      print(result);
+      print(result['amountSpent']);
     }
+
+    if (map.isEmpty) {
+      return 0;
+    }
+    return map.first['amountSpent'] as double;
   }
 
   Future<int> accumulateAmount(Spent spent) async {
     final db = await instance.database;
-    var prevRead = await readAmount(spent.date);
-    var prevAmt = prevRead.amount;
+    var prevAmt = await getSpendingByDate(spent.date);
     var newAmt = prevAmt + spent.amount;
     Spent newSpent = Spent(date : spent.date, amount : newAmt);
     return db.update(
@@ -132,6 +135,34 @@ class spentDatabase {
       return 0;
     }
 
-    return results.map((spent) => spent.amount).reduce((value, element) => value + element);
+    return results.map((spent) => spent.amount)
+        .reduce((value, element) => value + element);
   }
+
+  Future<double> getTotalSpendingMonthly(int month) async {
+    final db = await instance.database;
+    String monthStr;
+    if (month < 10) {
+      monthStr = '0' + month.toString();
+    } else {
+      monthStr = month.toString();
+    }
+
+    final results = await db.rawQuery(
+      "SELECT * FROM spent WHERE strftime('%m', date) = '$monthStr'"
+    );
+
+    if (results.isEmpty) {
+      return 0;
+    }
+
+    return results.map((map) => Spent.fromMap(map).amount)
+        .toList()
+        .reduce((value, element) => value + element);
+  }
+
+  Future<double> getSpendingToday() async {
+    return await getSpendingByDate(DateTime.now());
+  }
+
 }

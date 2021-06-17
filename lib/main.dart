@@ -122,44 +122,48 @@ class _BrokeMain extends State<BrokeMain> {
             ElevatedButton(
               onPressed: () {
                 showDatePicker(
-                    context: context,
-                    initialDate: _date,
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime.now()
+                  context: context,
+                  initialDate: _date,
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime.now()
                 ).then((date) => {
                   setState(() {
                     if (date != null) {
                       _date = date;
                     }
-                  })
+                  }
+                  )
                 });
               }, child: Text("Pick a date"),
             ),
-
             //add space between widget
             SizedBox(height: 20),
             TextFormField(
               controller: amountController,
               keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))],
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                  RegExp('[0-9.,]+')
+                )
+              ],
             ),
             //add space between widget
             SizedBox(height : 20),
             ElevatedButton(
-                onPressed: () async {
-                  if (amountController.text != '') {
-                    spentDatabase.instance.insertAmount(
-                      Spent(
-                        date: _date,
-                        amount: double.parse(amountController.text))
+              onPressed: () async {
+                if (amountController.text != '') {
+                  spentDatabase.instance.insertAmount(
+                    Spent(
+                      date: _date,
+                      amount: double.parse(amountController.text))
                     );
                   }
                   amountController.clear();
                 },
-                child: Text("BROKE!"),
-                style : ElevatedButton.styleFrom(
-                    primary: Colors.brown
-                )
+              child: Text("BROKE!"),
+              style : ElevatedButton.styleFrom(
+                primary: Colors.brown
+              )
             )
           ],
           mainAxisAlignment: MainAxisAlignment.center
@@ -185,24 +189,86 @@ class _Analytics extends State<Analytics> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-          child : Column(
-            children: [
-              Text("Analytics : "),
-              FutureBuilder(
-                future: spentDatabase.instance.getTotalSpending(),
+      body: Center(
+        child : Column(
+          children: [
+            Text("Analytics : "),
+
+            FutureBuilder(
+                future: spentDatabase.instance.getSpendingToday(),
                 builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                   if (snapshot.hasData) {
-                    return Text("Total spending : ${snapshot.data.toString()}");
+                    return Text("spent today: ${snapshot.data.toString()}");
                   } else {
                     return CircularProgressIndicator();
                   }
                 }
-              ),
-            ],
-            mainAxisAlignment: MainAxisAlignment.center
-          )
-        ),
+            ),
+
+            FutureBuilder(
+              future: spentDatabase.instance.getTotalSpending(),
+              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                if (snapshot.hasData) {
+                  return Text("total spending : ${snapshot.data.toString()}");
+                } else {
+                  return CircularProgressIndicator();
+                }
+              }
+            ),
+
+            FutureBuilder(
+              future: spentDatabase.instance.getTotalSpendingMonthly(DateTime.now().month),
+              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                String month;
+                switch(DateTime.now().month) {
+                  case 1 :
+                    month = 'January';
+                    break;
+                  case 2:
+                    month = 'February';
+                    break;
+                  case 3:
+                    month = 'March';
+                    break;
+                  case 4 :
+                    month = 'April';
+                    break;
+                  case 5:
+                    month = 'May';
+                    break;
+                  case 6:
+                    month = 'June';
+                    break;
+                  case 7 :
+                    month = 'July';
+                    break;
+                  case 8:
+                    month = 'August';
+                    break;
+                  case 9:
+                    month = 'September';
+                    break;
+                  case 10 :
+                    month = 'October';
+                    break;
+                  case 11:
+                    month = 'November';
+                    break;
+                  default :
+                    month = 'December';
+                    break;
+                }
+                if (snapshot.hasData) {
+                  return Text("total spending this month ($month) : ${snapshot.data.toString()}");
+                } else {
+                  return CircularProgressIndicator();
+                }
+              }
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center
+        )
+      ),
     );
   }
 

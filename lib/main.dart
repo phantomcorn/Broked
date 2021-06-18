@@ -192,10 +192,10 @@ class _Analytics extends State<Analytics> {
       body: Center(
         child : Column(
           children: [
-            Text("Analytics : "),
+            Text("analytics : "),
 
             FutureBuilder(
-                future: spentDatabase.instance.getSpendingToday(),
+              future: spentDatabase.instance.getSpendingToday(),
                 builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                   if (snapshot.hasData) {
                     return Text("spent today: ${snapshot.data.toString()}");
@@ -206,10 +206,21 @@ class _Analytics extends State<Analytics> {
             ),
 
             FutureBuilder(
-              future: spentDatabase.instance.getTotalSpending(),
+                future: spentDatabase.instance.getAvgSpending(DateTime.now().year),
+                builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                  if (snapshot.hasData) {
+                    return Text("avg spending per month: ${snapshot.data}");
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                }
+            ),
+
+            FutureBuilder(
+              future: spentDatabase.instance.getTotalSpendingYearly(DateTime.now().year),
               builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                 if (snapshot.hasData) {
-                  return Text("total spending : ${snapshot.data.toString()}");
+                  return Text("annual spending: ${snapshot.data}");
                 } else {
                   return CircularProgressIndicator();
                 }
@@ -222,40 +233,40 @@ class _Analytics extends State<Analytics> {
                 String month;
                 switch(DateTime.now().month) {
                   case 1 :
-                    month = 'January';
+                    month = 'january';
                     break;
                   case 2:
-                    month = 'February';
+                    month = 'february';
                     break;
                   case 3:
-                    month = 'March';
+                    month = 'march';
                     break;
                   case 4 :
-                    month = 'April';
+                    month = 'april';
                     break;
                   case 5:
-                    month = 'May';
+                    month = 'may';
                     break;
                   case 6:
-                    month = 'June';
+                    month = 'june';
                     break;
                   case 7 :
-                    month = 'July';
+                    month = 'july';
                     break;
                   case 8:
-                    month = 'August';
+                    month = 'august';
                     break;
                   case 9:
-                    month = 'September';
+                    month = 'september';
                     break;
                   case 10 :
-                    month = 'October';
+                    month = 'october';
                     break;
                   case 11:
-                    month = 'November';
+                    month = 'november';
                     break;
                   default :
-                    month = 'December';
+                    month = 'december';
                     break;
                 }
                 if (snapshot.hasData) {

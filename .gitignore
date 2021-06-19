@@ -1,1 +1,8 @@
-/build
+build/
+.idea/*
+broked.iml
+pubspec.yaml
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import "Database.dart";
+import "CustomTheme.dart";
 
 void main() {
   runApp(MyApp());
@@ -16,18 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Broked',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.amber,
-      ),
+      theme: customTheme.greyTheme,
       home: MyHomePage(title: 'Broked'),
     );
   }
@@ -52,21 +42,6 @@ class MyHomePage extends StatefulWidget {
 
 
 class _MyHomePageState extends State<MyHomePage> {
-/*
-  Future checkFirstSeen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool _firstTime = (prefs.getBool('firstTime') ?? false);
-
-    if (_firstTime) {
-      //create db
-    } else {
-      await prefs.setBool('firstTime', true);
-      //get db and get pointer
-    }
-  }
-
- */
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
         length : 2,
         child : Scaffold(
           bottomNavigationBar: Material(
-            color: Colors.greenAccent,
             child: TabBar(
               tabs: [
                 Tab(text: "Input"),
@@ -161,9 +135,6 @@ class _BrokeMain extends State<BrokeMain> {
                   amountController.clear();
                 },
               child: Text("BROKE!"),
-              style : ElevatedButton.styleFrom(
-                primary: Colors.brown
-              )
             )
           ],
           mainAxisAlignment: MainAxisAlignment.center

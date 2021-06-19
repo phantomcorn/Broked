@@ -100,11 +100,7 @@ class spentDatabase {
         columns: ['date','amountSpent'],
         where: 'date = ?',
         whereArgs: [Spent.dateToSQLFormat(date)]);
-
-    for (Map<String, Object?> result in map) {
-      print(result);
-      print(result['amountSpent']);
-    }
+    
 
     if (map.isEmpty) {
       return 0;

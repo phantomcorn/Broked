@@ -2,6 +2,7 @@ import 'package:broked/Database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import "Database.dart";
 import "CustomTheme.dart";
 
@@ -92,23 +93,22 @@ class _BrokeMain extends State<BrokeMain> {
       body: Center(
         child : Column(
           children: <Widget> [
-            Text("${DateFormat('dd-MM-yyyy').format(_date)}"),
-            ElevatedButton(
-              onPressed: () {
-                showDatePicker(
-                  context: context,
-                  initialDate: _date,
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime.now()
-                ).then((date) => {
-                  setState(() {
-                    if (date != null) {
-                      _date = date;
-                    }
+            TextButton(
+              onPressed : () {
+                DatePicker.showDatePicker(
+                  context,
+                  showTitleActions: true,
+                  currentTime: _date,
+                  minTime: DateTime(2000),
+                  maxTime: DateTime.now(),
+                  onConfirm: (date) {
+                    setState(() =>
+                      _date = date
+                    );
                   }
-                  )
-                });
-              }, child: Text("Pick a date"),
+                );
+              },
+              child : Text("${DateFormat('dd-MM-yyyy').format(_date)}")
             ),
             //add space between widget
             SizedBox(height: 20),

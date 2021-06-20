@@ -108,8 +108,9 @@ class _BrokeMain extends State<BrokeMain> {
                   }
                 );
               },
-              child : Text("${DateFormat('dd-MM-yyyy').format(_date)}")
+              child : Text("${DateFormat('dd MMM yyyy').format(_date)}")
             ),
+
             //add space between widget
             SizedBox(height: 20),
             TextFormField(
@@ -253,6 +254,7 @@ class _Analytics extends State<Analytics> {
       ),
     );
   }
+
 
 }
 

@@ -115,7 +115,7 @@ class _BrokeMain extends State<BrokeMain> {
                 ),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.blueAccent)
-                )
+                ),
               ),
               Container(
                 child: TextFormField(
@@ -142,6 +142,7 @@ class _BrokeMain extends State<BrokeMain> {
                   border: Border.all(color: Colors.blueAccent),
                 ),
                 width: 300,
+                margin: EdgeInsets.only(bottom : 50, top : 30),
               ),
               Container(
                 child : AnimatedButton(
@@ -164,9 +165,6 @@ class _BrokeMain extends State<BrokeMain> {
                   color: const Color.fromRGBO(169, 169, 169, 1),
                   width: 350,
                   height:  100,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueAccent)
                 ),
               )
             ],

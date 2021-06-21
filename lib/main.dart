@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:animated_button/animated_button.dart';
 import "Database.dart";
 import "CustomTheme.dart";
 
@@ -112,7 +113,7 @@ class _BrokeMain extends State<BrokeMain> {
             ),
 
             //add space between widget
-            SizedBox(height: 20),
+            SizedBox(height: 100),
             TextFormField(
               controller: amountController,
               keyboardType: TextInputType.number,
@@ -123,8 +124,8 @@ class _BrokeMain extends State<BrokeMain> {
               ],
             ),
             //add space between widget
-            SizedBox(height : 20),
-            ElevatedButton(
+            SizedBox(height : 300),
+            AnimatedButton(
               onPressed: () async {
                 if (amountController.text != '') {
                   spentDatabase.instance.insertAmount(
@@ -135,8 +136,16 @@ class _BrokeMain extends State<BrokeMain> {
                   }
                   amountController.clear();
                 },
-              child: Text("BROKE!"),
+              child: Text(
+                "BROKE!",
+                style: TextStyle(
+                    fontSize: 30
+                ),
+              ),
+              height: 80,
+              color: const Color.fromRGBO(169, 169, 169, 1),
             )
+
           ],
           mainAxisAlignment: MainAxisAlignment.center
         ),

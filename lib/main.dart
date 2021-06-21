@@ -90,66 +90,90 @@ class _BrokeMain extends State<BrokeMain> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child : Column(
-          children: <Widget> [
-            TextButton(
-              onPressed : () {
-                DatePicker.showDatePicker(
-                  context,
-                  showTitleActions: true,
-                  currentTime: _date,
-                  minTime: DateTime(2000),
-                  maxTime: DateTime.now(),
-                  onConfirm: (date) {
-                    setState(() =>
-                      _date = date
+    return SafeArea(
+      child : Scaffold(
+        body: Center(
+          child : Column(
+            children: <Widget> [
+              Container(
+                child : TextButton(
+                  onPressed : () {
+                    DatePicker.showDatePicker(
+                      context,
+                      showTitleActions: true,
+                      currentTime: _date,
+                      minTime: DateTime(2000),
+                      maxTime: DateTime.now(),
+                      onConfirm: (date) {
+                        setState(() =>
+                          _date = date
+                        );
+                      }
                     );
-                  }
-                );
-              },
-              child : Text("${DateFormat('dd MMM yyyy').format(_date)}")
-            ),
-
-            //add space between widget
-            SizedBox(height: 50),
-            TextFormField(
-              controller: amountController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                  RegExp('[0-9.,]+')
-                )
-              ],
-            ),
-            //add space between widget
-            SizedBox(height : 125),
-            AnimatedButton(
-              onPressed: () async {
-                if (amountController.text != '') {
-                  spentDatabase.instance.insertAmount(
-                    Spent(
-                      date: _date,
-                      amount: double.parse(amountController.text))
-                    );
-                  }
-                  amountController.clear();
-                },
-              child: Text(
-                "BROKE!",
-                style: TextStyle(
-                    fontSize: 30
+                  },
+                  child : Text("${DateFormat('dd MMM yyyy').format(_date)}")
                 ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blueAccent)
+                )
               ),
-              height: 80,
-              color: const Color.fromRGBO(169, 169, 169, 1),
-            )
-
-          ],
-          mainAxisAlignment: MainAxisAlignment.center
+              Container(
+                child: TextFormField(
+                  controller: amountController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp('[0-9.,]+')
+                    ),
+                    LengthLimitingTextInputFormatter(8),
+                  ],
+                  decoration: InputDecoration(
+                    hintText: 'Amount',
+                    hintStyle: TextStyle(
+                      color : Colors.grey
+                    ),
+                    contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0)
+                  ),
+                  style: TextStyle(
+                    fontSize: 30
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blueAccent),
+                ),
+                width: 300,
+              ),
+              Container(
+                child : AnimatedButton(
+                  onPressed: () async {
+                    if (amountController.text != '') {
+                      spentDatabase.instance.insertAmount(
+                        Spent(
+                          date: _date,
+                          amount: double.parse(amountController.text))
+                        );
+                      }
+                      amountController.clear();
+                    },
+                  child: Text(
+                    "BROKE!",
+                    style: TextStyle(
+                        fontSize: 30
+                    ),
+                  ),
+                  color: const Color.fromRGBO(169, 169, 169, 1),
+                  width: 350,
+                  height:  100,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blueAccent)
+                ),
+              )
+            ],
+            mainAxisAlignment: MainAxisAlignment.center
+          ),
         ),
-      )
+      ),
     );
   }
 

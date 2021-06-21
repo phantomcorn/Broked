@@ -115,7 +115,7 @@ class _BrokeMain extends State<BrokeMain> {
                 ),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.blueAccent)
-                ),
+                )
               ),
               Container(
                 child: TextFormField(

@@ -113,7 +113,7 @@ class _BrokeMain extends State<BrokeMain> {
             ),
 
             //add space between widget
-            SizedBox(height: 100),
+            SizedBox(height: 50),
             TextFormField(
               controller: amountController,
               keyboardType: TextInputType.number,
@@ -124,7 +124,7 @@ class _BrokeMain extends State<BrokeMain> {
               ],
             ),
             //add space between widget
-            SizedBox(height : 300),
+            SizedBox(height : 125),
             AnimatedButton(
               onPressed: () async {
                 if (amountController.text != '') {

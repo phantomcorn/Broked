@@ -113,9 +113,6 @@ class _BrokeMain extends State<BrokeMain> {
                   },
                   child : Text("${DateFormat('dd MMM yyyy').format(_date)}")
                 ),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueAccent)
-                )
               ),
               Container(
                 child: TextFormField(

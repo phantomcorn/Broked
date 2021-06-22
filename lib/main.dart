@@ -191,98 +191,171 @@ class _Analytics extends State<Analytics> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child : Column(
-          children: [
-            Text("analytics : "),
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
+          child : Column(
+            children: [
+              IconButton(
+                icon : Icon(Icons.delete),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                        backgroundColor: Colors.white,
+                        child: PopUpBox(context),
+                      );
+                    }
+                  );
+                },
+              ),
+              Text("analytics : "),
 
-            FutureBuilder(
-              future: spentDatabase.instance.getSpendingToday(),
+              FutureBuilder(
+                future: spentDatabase.instance.getSpendingToday(),
+                  builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                    if (snapshot.hasData) {
+                      return Text("spent today: ${snapshot.data.toString()}");
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  }
+              ),
+
+              FutureBuilder(
+                  future: spentDatabase.instance.getAvgSpending(DateTime.now().year),
+                  builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                    if (snapshot.hasData) {
+                      return Text("avg spending per month: ${snapshot.data}");
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  }
+              ),
+
+              FutureBuilder(
+                future: spentDatabase.instance.getTotalSpendingYearly(DateTime.now().year),
                 builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                   if (snapshot.hasData) {
-                    return Text("spent today: ${snapshot.data.toString()}");
+                    return Text("annual spending: ${snapshot.data}");
                   } else {
                     return CircularProgressIndicator();
                   }
                 }
-            ),
+              ),
 
-            FutureBuilder(
-                future: spentDatabase.instance.getAvgSpending(DateTime.now().year),
+              FutureBuilder(
+                future: spentDatabase.instance.getTotalSpendingMonthly(DateTime.now().month),
                 builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                  String month;
+                  switch(DateTime.now().month) {
+                    case 1 :
+                      month = 'january';
+                      break;
+                    case 2:
+                      month = 'february';
+                      break;
+                    case 3:
+                      month = 'march';
+                      break;
+                    case 4 :
+                      month = 'april';
+                      break;
+                    case 5:
+                      month = 'may';
+                      break;
+                    case 6:
+                      month = 'june';
+                      break;
+                    case 7 :
+                      month = 'july';
+                      break;
+                    case 8:
+                      month = 'august';
+                      break;
+                    case 9:
+                      month = 'september';
+                      break;
+                    case 10 :
+                      month = 'october';
+                      break;
+                    case 11:
+                      month = 'november';
+                      break;
+                    default :
+                      month = 'december';
+                      break;
+                  }
                   if (snapshot.hasData) {
-                    return Text("avg spending per month: ${snapshot.data}");
+                    return Text("total spending this month ($month) : ${snapshot.data.toString()}");
                   } else {
                     return CircularProgressIndicator();
                   }
                 }
-            ),
+              ),
+            ],
+          )
+        ),
+      )
+    );
+  }
 
-            FutureBuilder(
-              future: spentDatabase.instance.getTotalSpendingYearly(DateTime.now().year),
-              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                if (snapshot.hasData) {
-                  return Text("annual spending: ${snapshot.data}");
-                } else {
-                  return CircularProgressIndicator();
-                }
-              }
-            ),
+  Widget PopUpBox(context) {
+    return Stack(
+      children: <Widget>[
+        Container (
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(color: Colors.black,offset: Offset(0,10),
+                    blurRadius: 10
+                ),
+              ]
+          ),
+          width: MediaQuery.of(context).size.height / 1.5,
+          height : MediaQuery.of(context).size.width / 2,
+          child : Column(
+            children: [
+              Text("Reset Database"),
+              SizedBox(height : 25),
+              Text("All input data you've previously entered will be erased. Are you sure?"),
+              SizedBox(height : 40),
+              Row(
+                children: [
+                  AnimatedButton(
+                      onPressed: () {
 
-            FutureBuilder(
-              future: spentDatabase.instance.getTotalSpendingMonthly(DateTime.now().month),
-              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                String month;
-                switch(DateTime.now().month) {
-                  case 1 :
-                    month = 'january';
-                    break;
-                  case 2:
-                    month = 'february';
-                    break;
-                  case 3:
-                    month = 'march';
-                    break;
-                  case 4 :
-                    month = 'april';
-                    break;
-                  case 5:
-                    month = 'may';
-                    break;
-                  case 6:
-                    month = 'june';
-                    break;
-                  case 7 :
-                    month = 'july';
-                    break;
-                  case 8:
-                    month = 'august';
-                    break;
-                  case 9:
-                    month = 'september';
-                    break;
-                  case 10 :
-                    month = 'october';
-                    break;
-                  case 11:
-                    month = 'november';
-                    break;
-                  default :
-                    month = 'december';
-                    break;
-                }
-                if (snapshot.hasData) {
-                  return Text("total spending this month ($month) : ${snapshot.data.toString()}");
-                } else {
-                  return CircularProgressIndicator();
-                }
-              }
-            ),
-          ],
-          mainAxisAlignment: MainAxisAlignment.center
+                      },
+                      child : Text("YES"),
+                      color: Color.fromRGBO(46,139,87, 1),
+                      width: 100,
+                      height: 32
+                  ),
+                  AnimatedButton(
+                      onPressed: () {
+
+                      },
+                      child: Text("NO"),
+                      color: Color.fromRGBO(128, 0, 0, 1),
+                      width: 100,
+                      height: 32
+                  )
+                ],
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              )
+            ],
+          ),
         )
-      ),
+      ],
     );
   }
 

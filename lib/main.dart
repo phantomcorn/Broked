@@ -136,7 +136,9 @@ class _BrokeMain extends State<BrokeMain> {
                   ),
                 ),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueAccent),
+                  border: Border.all(color: const Color.fromRGBO(211, 211, 211,
+                      1)),
+                  borderRadius: BorderRadius.circular(10)
                 ),
                 width: 300,
                 margin: EdgeInsets.only(bottom : 50, top : 30),

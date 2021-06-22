@@ -17,7 +17,8 @@ class customTheme {
           ),
           primary : const Color.fromRGBO(169, 169, 169, 1),
           textStyle: TextStyle(
-            fontSize: 40
+            fontSize: 40,
+            fontFamily: GoogleFonts.nunito().fontFamily
           )
         )
       ),
@@ -25,7 +26,8 @@ class customTheme {
         style: TextButton.styleFrom(
           primary: const Color.fromRGBO(169, 169, 169, 1),
           textStyle: TextStyle(
-            fontSize: 30
+            fontSize: 30,
+            fontFamily: GoogleFonts.nunito().fontFamily
           )
         )
       )

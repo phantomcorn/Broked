@@ -129,6 +129,7 @@ class _BrokeMain extends State<BrokeMain> {
                     hintStyle: TextStyle(
                       color : Colors.grey
                     ),
+                    border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0)
                   ),
                   style: TextStyle(

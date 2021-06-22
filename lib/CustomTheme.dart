@@ -24,7 +24,7 @@ class customTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          primary: const Color.fromRGBO(169, 169, 169, 1),
+          primary: const Color.fromRGBO(128, 128, 128, 1),
           textStyle: TextStyle(
             fontSize: 30,
             fontFamily: GoogleFonts.nunito().fontFamily

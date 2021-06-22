@@ -58,11 +58,11 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
+            icon: Icon(Icons.calculate),
             label : "input"
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.beach_access),
+            icon: Icon(Icons.show_chart),
             label : "analytics"
           )
         ],

@@ -68,7 +68,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         currentIndex: _selectedDisplay,
         onTap: onTabTapped,
-        selectedItemColor: Colors.grey,
+        selectedItemColor: Color.fromRGBO(105, 105, 105, 1),
+        unselectedItemColor: Color.fromRGBO(220, 220, 220, 1)
       ),
     );
   }

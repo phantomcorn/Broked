@@ -220,16 +220,24 @@ class _Analytics extends State<Analytics> {
                 )
               ),
               Container(
-                child : Text("analytics : "),
+                child : Text("analytics : ",
+                  style: TextStyle(
+                    fontSize: 16
+                  )
+                ),
                 margin: EdgeInsets.only(bottom : 40)
               ),
               FutureBuilder(
                 future: spentDatabase.instance.getSpendingToday(),
                   builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                     if (snapshot.hasData) {
-                      return Text("spent today: ${snapshot.data.toString()}");
+                      return Text("spent today: ${snapshot.data.toString()}",
+                        style: TextStyle(
+                          fontSize: 14
+                        )
+                      );
                     } else {
-                      return CircularProgressIndicator();
+                      return LinearProgressIndicator();
                     }
                   }
               ),
@@ -238,9 +246,13 @@ class _Analytics extends State<Analytics> {
                   future: spentDatabase.instance.getAvgSpending(DateTime.now().year),
                   builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                     if (snapshot.hasData) {
-                      return Text("avg spending per month: ${snapshot.data}");
+                      return Text("avg spending per month: ${snapshot.data}",
+                        style: TextStyle(
+                           fontSize: 14
+                        )
+                      );
                     } else {
-                      return CircularProgressIndicator();
+                      return LinearProgressIndicator();
                     }
                   }
               ),
@@ -249,9 +261,13 @@ class _Analytics extends State<Analytics> {
                 future: spentDatabase.instance.getTotalSpendingYearly(DateTime.now().year),
                 builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                   if (snapshot.hasData) {
-                    return Text("annual spending: ${snapshot.data}");
+                    return Text("annual spending: ${snapshot.data}",
+                      style: TextStyle(
+                        fontSize: 14
+                      )
+                    );
                   } else {
-                    return CircularProgressIndicator();
+                    return LinearProgressIndicator();
                   }
                 }
               ),
@@ -299,9 +315,13 @@ class _Analytics extends State<Analytics> {
                       break;
                   }
                   if (snapshot.hasData) {
-                    return Text("total spending this month ($month) : ${snapshot.data.toString()}");
+                    return Text("total spending this month ($month) : ${snapshot.data.toString()}",
+                      style: TextStyle(
+                            fontSize: 14
+                      )
+                    );
                   } else {
-                    return CircularProgressIndicator();
+                    return LinearProgressIndicator();
                   }
                 }
               ),

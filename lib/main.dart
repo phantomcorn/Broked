@@ -200,6 +200,7 @@ class _Analytics extends State<Analytics> {
                 alignment: Alignment.topRight,
                 child : IconButton(
                   icon : Icon(Icons.delete),
+                  color: Color.fromRGBO(220, 220, 220, 1),
                   onPressed: () {
                     showDialog(
                       context: context,
@@ -218,8 +219,10 @@ class _Analytics extends State<Analytics> {
                   }
                 )
               ),
-              Text("analytics : "),
-
+              Container(
+                child : Text("analytics : "),
+                margin: EdgeInsets.only(bottom : 40)
+              ),
               FutureBuilder(
                 future: spentDatabase.instance.getSpendingToday(),
                   builder: (BuildContext context, AsyncSnapshot<double> snapshot) {

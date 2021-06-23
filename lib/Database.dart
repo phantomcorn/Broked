@@ -74,6 +74,11 @@ class spentDatabase {
   Future _createDB(Database db, int version) async {
     await db.execute('CREATE TABLE spent(date DATE PRIMARY KEY, amountSpent REAL)');
   }
+  
+  Future<void> deleteAllRecords() async {
+    final db = await instance.database;
+    await db.rawDelete("DELETE FROM spent");
+  }
 
   Future close() async {
     final db = await instance.database;
@@ -175,6 +180,7 @@ class spentDatabase {
         .toList()
         .reduce((value, element) => value + element);
   }
+  
 
   Future<double> getSpendingToday() async {
     return await getSpendingByDate(DateTime.now());

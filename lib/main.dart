@@ -196,24 +196,27 @@ class _Analytics extends State<Analytics> {
         body: Center(
           child : Column(
             children: [
-              IconButton(
-                icon : Icon(Icons.delete),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(10),
-                        ),
-                        elevation: 0,
-                        backgroundColor: Colors.white,
-                        child: PopUpBox(context),
-                      );
-                    }
-                  );
-                },
+              Align(
+                alignment: Alignment.topRight,
+                child : IconButton(
+                  icon : Icon(Icons.delete),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                              BorderRadius.circular(10),
+                          ),
+                          elevation: 0,
+                          backgroundColor: Colors.white,
+                          child: PopUpBox(context),
+                        );
+                      }
+                    );
+                  }
+                )
               ),
               Text("analytics : "),
 

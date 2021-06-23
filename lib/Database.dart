@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:intl/intl.dart';
@@ -85,18 +86,6 @@ class spentDatabase {
     db.close();
   }
 
-
-  Future<void> insertAmount(Spent data) async {
-    final db = await instance.database;
-
-
-    final id = await db.insert(
-        'spent',
-        data.toMap(),
-        conflictAlgorithm : ConflictAlgorithm.replace
-    );
-
-  }
   
   Future<double> getSpendingByDate(DateTime date) async {
     final db = await instance.database;
@@ -110,19 +99,19 @@ class spentDatabase {
     if (map.isEmpty) {
       return 0;
     }
+    print("${map.first['amountSpent']}");
     return map.first['amountSpent'] as double;
   }
 
-  Future<int> accumulateAmount(Spent spent) async {
+  Future<int> accumulateAmount(Spent oldSpent) async {
     final db = await instance.database;
-    var prevAmt = await getSpendingByDate(spent.date);
-    var newAmt = prevAmt + spent.amount;
-    Spent newSpent = Spent(date : spent.date, amount : newAmt);
-    return db.update(
+    var prevAmt = await getSpendingByDate(oldSpent.date);
+    var newAmt = prevAmt + oldSpent.amount;
+    Spent newSpent = Spent(date : oldSpent.date, amount : newAmt);
+    return db.insert(
         'spent',
         newSpent.toMap(),
-        where: 'date = ?',
-        whereArgs: [Spent.dateToSQLFormat(spent.date)]
+        conflictAlgorithm : ConflictAlgorithm.replace
     );
   }
 

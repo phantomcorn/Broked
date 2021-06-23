@@ -4,12 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:animated_button/animated_button.dart';
+import 'package:audioplayers/audioplayers.dart';
 import "Database.dart";
 import "CustomTheme.dart";
 
 void main() {
   runApp(MyApp());
 }
+
+AudioCache player = AudioCache();
 
 class MyApp extends StatelessWidget {
 
@@ -27,6 +30,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   final String title;
+  
 
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -84,6 +88,7 @@ class BrokeMain extends StatefulWidget {
 }
 
 class _BrokeMain extends State<BrokeMain> {
+
 
   DateTime _date = DateTime.now();
   final amountController = TextEditingController();
@@ -148,11 +153,14 @@ class _BrokeMain extends State<BrokeMain> {
                 child : AnimatedButton(
                   onPressed: () async {
                     if (amountController.text != '') {
+                      player.play("success.wav");
                       spentDatabase.instance.accumulateAmount(
                         Spent(
                           date: _date,
                           amount: double.parse(amountController.text))
                         );
+                      } else {
+                       player.play("default.wav");
                       }
                       amountController.clear();
                     },
@@ -359,6 +367,7 @@ class _Analytics extends State<Analytics> {
                 children: [
                   AnimatedButton(
                       onPressed: () async {
+                        player.play("default.wav");
                         await spentDatabase.instance.deleteAllRecords();
                         setState(() {
                         });
@@ -371,6 +380,7 @@ class _Analytics extends State<Analytics> {
                   ),
                   AnimatedButton(
                       onPressed: () {
+                        player.play("default.wav");
                         Navigator.pop(context);
                       },
                       child: Text("NO"),

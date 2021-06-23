@@ -332,8 +332,11 @@ class _Analytics extends State<Analytics> {
               Row(
                 children: [
                   AnimatedButton(
-                      onPressed: () {
-
+                      onPressed: () async {
+                        await spentDatabase.instance.deleteAllRecords();
+                        setState(() {
+                        });
+                        Navigator.pop(context);
                       },
                       child : Text("YES"),
                       color: Color.fromRGBO(46,139,87, 1),
@@ -342,7 +345,7 @@ class _Analytics extends State<Analytics> {
                   ),
                   AnimatedButton(
                       onPressed: () {
-
+                        Navigator.pop(context);
                       },
                       child: Text("NO"),
                       color: Color.fromRGBO(128, 0, 0, 1),

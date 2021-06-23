@@ -99,7 +99,6 @@ class spentDatabase {
     if (map.isEmpty) {
       return 0;
     }
-    print("${map.first['amountSpent']}");
     return map.first['amountSpent'] as double;
   }
 

@@ -148,7 +148,7 @@ class _BrokeMain extends State<BrokeMain> {
                 child : AnimatedButton(
                   onPressed: () async {
                     if (amountController.text != '') {
-                      spentDatabase.instance.insertAmount(
+                      spentDatabase.instance.accumulateAmount(
                         Spent(
                           date: _date,
                           amount: double.parse(amountController.text))

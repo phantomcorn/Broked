@@ -20,10 +20,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Broked',
-      theme: customTheme.greyTheme,
-      home: MyHomePage(title: 'Broked'),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+      child : MaterialApp(
+        title: 'Broked',
+        theme: customTheme.greyTheme,
+        home: MyHomePage(title: 'Broked'),
+      )
     );
   }
 }
@@ -123,6 +128,7 @@ class _BrokeMain extends State<BrokeMain> {
                 child: TextFormField(
                   controller: amountController,
                   keyboardType: TextInputType.number,
+                  autofocus: true,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
                         RegExp('[0-9.,]+')

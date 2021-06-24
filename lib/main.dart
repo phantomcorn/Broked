@@ -285,7 +285,11 @@ class _Analytics extends State<Analytics> {
                         )
                       );
                     } else {
-                      return LinearProgressIndicator();
+                      return Text("spent today: ",
+                          style: TextStyle(
+                              fontSize: 14
+                          )
+                      );
                     }
                   }
               ),
@@ -300,7 +304,11 @@ class _Analytics extends State<Analytics> {
                         )
                       );
                     } else {
-                      return LinearProgressIndicator();
+                      return Text("avg spending per month: ",
+                          style: TextStyle(
+                              fontSize: 14
+                          )
+                      );
                     }
                   }
               ),
@@ -315,7 +323,11 @@ class _Analytics extends State<Analytics> {
                       )
                     );
                   } else {
-                    return LinearProgressIndicator();
+                    return Text("annual spending: ",
+                        style: TextStyle(
+                            fontSize: 14
+                        )
+                    );
                   }
                 }
               ),
@@ -369,7 +381,11 @@ class _Analytics extends State<Analytics> {
                       )
                     );
                   } else {
-                    return LinearProgressIndicator();
+                    return Text("total spending this month ($month) : ",
+                        style: TextStyle(
+                            fontSize: 14
+                        )
+                    );
                   }
                 }
               ),

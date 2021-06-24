@@ -18,8 +18,9 @@ class MyApp extends StatelessWidget {
 
   static Map<String,Map<String,dynamic>> Theme = {
     "grey" : {
-      "bg" : Color.fromRGBO(255, 255, 255, 1),
+      "bg" : Colors.white,
       "text" : Color.fromRGBO(105, 105, 105, 1),
+      "buttonText" : Colors.white,
       "hintText" : Color.fromRGBO(211, 211, 211, 1),
       "inputBorder" : Color.fromRGBO(211, 211, 211, 1),
       "dateButton" : Color.fromRGBO(128, 128, 128, 1),
@@ -30,8 +31,9 @@ class MyApp extends StatelessWidget {
       "soundSucc" : "greySucc.mp3"
     },
     "retro" : {
-      "bg" : Color.fromRGBO(0, 0, 0, 1),
+      "bg" : Colors.black,
       "text" : Color.fromRGBO(224,231,34, 1),
+      "buttonText" : Colors.black,
       "hintText" : Color.fromRGBO(224,231,34, 1),
       "inputBorder" : Color.fromRGBO(224,231,34, 1),
       "dateButton" : Color.fromRGBO(0, 255, 255, 1),
@@ -45,7 +47,7 @@ class MyApp extends StatelessWidget {
 
   };
 
-  static String selectedTheme = "grey";
+  static String selectedTheme = "retro";
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +206,8 @@ class _BrokeMain extends State<BrokeMain> {
                   child: Text(
                     "BROKE!",
                     style: TextStyle(
-                        fontSize: 30
+                        fontSize: 30,
+                        color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
                     ),
                   ),
                   color: MyApp.Theme[MyApp.selectedTheme]!["brokeButton"],
@@ -410,7 +413,11 @@ class _Analytics extends State<Analytics> {
                         });
                         Navigator.pop(context);
                       },
-                      child : Text("YES"),
+                      child : Text("YES",
+                        style: TextStyle(
+                          color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+                        )
+                      ),
                       color: MyApp.Theme[MyApp.selectedTheme]!["deleteYes"]!,
                       width: 100,
                       height: 32
@@ -420,7 +427,11 @@ class _Analytics extends State<Analytics> {
                         player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
                         Navigator.pop(context);
                       },
-                      child: Text("NO"),
+                      child: Text("NO",
+                        style: TextStyle(
+                          color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+                        )
+                      ),
                       color: MyApp.Theme[MyApp.selectedTheme]!["deleteNo"]!,
                       width: 100,
                       height: 32

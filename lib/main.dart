@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       "bg" : Color.fromRGBO(255, 255, 255, 1),
       "text" : Color.fromRGBO(105, 105, 105, 1),
       "hintText" : Color.fromRGBO(211, 211, 211, 1),
+      "inputBorder" : Color.fromRGBO(211, 211, 211, 1),
       "dateButton" : Color.fromRGBO(128, 128, 128, 1),
       "brokeButton" : Color.fromRGBO(169, 169, 169, 1),
       "deleteYes" : Color.fromRGBO(46,139,87, 1),
@@ -30,8 +31,9 @@ class MyApp extends StatelessWidget {
     },
     "retro" : {
       "bg" : Color.fromRGBO(0, 0, 0, 1),
-      "text" : Color.fromRGBO(255, 255, 255, 1),
-      "hintText" : Color.fromRGBO(255, 255, 255, 1),
+      "text" : Color.fromRGBO(224,231,34, 1),
+      "hintText" : Color.fromRGBO(224,231,34, 1),
+      "inputBorder" : Color.fromRGBO(224,231,34, 1),
       "dateButton" : Color.fromRGBO(0, 255, 255, 1),
       "brokeButton" : Color.fromRGBO(254, 1, 254, 1),
       "deleteYes" : Color.fromRGBO(57, 255, 20, 1),
@@ -176,7 +178,7 @@ class _BrokeMain extends State<BrokeMain> {
                 ),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Color.fromRGBO(211, 211, 211, 1),
+                    color: MyApp.Theme[MyApp.selectedTheme]!["inputBorder"],
                     width: 4
                   ),
                   borderRadius: BorderRadius.circular(10)

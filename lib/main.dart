@@ -142,8 +142,10 @@ class _BrokeMain extends State<BrokeMain> {
                   ),
                 ),
                 decoration: BoxDecoration(
-                  border: Border.all(color: const Color.fromRGBO(211, 211, 211,
-                      1)),
+                  border: Border.all(
+                    color: const Color.fromRGBO(211, 211, 211, 1),
+                    width: 4
+                  ),
                   borderRadius: BorderRadius.circular(10)
                 ),
                 width: 300,
@@ -153,17 +155,17 @@ class _BrokeMain extends State<BrokeMain> {
                 child : AnimatedButton(
                   onPressed: () async {
                     if (amountController.text != '') {
-                      player.play("success.wav");
-                      spentDatabase.instance.accumulateAmount(
+                      player.play("greySucc.mp3");
+                      await spentDatabase.instance.accumulateAmount(
                         Spent(
                           date: _date,
                           amount: double.parse(amountController.text))
                         );
-                      } else {
-                       player.play("default.wav");
-                      }
-                      amountController.clear();
-                    },
+                    } else {
+                      player.play("greyDefault.mp3");
+                    }
+                    amountController.clear();
+                  },
                   child: Text(
                     "BROKE!",
                     style: TextStyle(
@@ -367,7 +369,7 @@ class _Analytics extends State<Analytics> {
                 children: [
                   AnimatedButton(
                       onPressed: () async {
-                        player.play("default.wav");
+                        player.play("greyDefault.mp3");
                         await spentDatabase.instance.deleteAllRecords();
                         setState(() {
                         });
@@ -380,7 +382,7 @@ class _Analytics extends State<Analytics> {
                   ),
                   AnimatedButton(
                       onPressed: () {
-                        player.play("default.wav");
+                        player.play("greyDefault.mp3");
                         Navigator.pop(context);
                       },
                       child: Text("NO"),

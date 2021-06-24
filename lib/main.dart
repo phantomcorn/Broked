@@ -16,8 +16,35 @@ AudioCache player = AudioCache();
 
 class MyApp extends StatelessWidget {
 
+  static Map<String,Map<String,dynamic>> Theme = {
+    "grey" : {
+      "bg" : Color.fromRGBO(255, 255, 255, 1),
+      "text" : Color.fromRGBO(105, 105, 105, 1),
+      "hintText" : Color.fromRGBO(211, 211, 211, 1),
+      "dateButton" : Color.fromRGBO(128, 128, 128, 1),
+      "brokeButton" : Color.fromRGBO(169, 169, 169, 1),
+      "deleteYes" : Color.fromRGBO(46,139,87, 1),
+      "deleteNo" : Color.fromRGBO(128, 0, 0, 1),
+      "soundDef" : "greyDefault.mp3",
+      "soundSucc" : "greySucc.mp3"
+    },
+    "retro" : {
+      "bg" : Color.fromRGBO(0, 0, 0, 1),
+      "text" : Color.fromRGBO(255, 255, 255, 1),
+      "hintText" : Color.fromRGBO(255, 255, 255, 1),
+      "dateButton" : Color.fromRGBO(0, 255, 255, 1),
+      "brokeButton" : Color.fromRGBO(254, 1, 254, 1),
+      "deleteYes" : Color.fromRGBO(57, 255, 20, 1),
+      "deleteNo" : Color.fromRGBO( 255, 7, 58, 1),
+      "soundDef" : "retroDefault.wav",
+      "soundSucc" : "retroSucc.wav"
+    }
 
-  // This widget is the root of your application.
+
+  };
+
+  static String selectedTheme = "grey";
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -25,8 +52,8 @@ class MyApp extends StatelessWidget {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child : MaterialApp(
-        title: 'Broked',
-        theme: customTheme.greyTheme,
+        title: 'Broked', 
+        theme: customTheme.defaultTheme,
         home: MyHomePage(title: 'Broked'),
       )
     );
@@ -35,7 +62,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   final String title;
-  
 
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -45,6 +71,7 @@ class MyHomePage extends StatefulWidget {
 
 
 class _MyHomePageState extends State<MyHomePage> {
+
 
   int _selectedDisplay = 0;
   static const List<Widget> _displayOptions = <Widget>[
@@ -137,18 +164,19 @@ class _BrokeMain extends State<BrokeMain> {
                   decoration: InputDecoration(
                     hintText: 'Amount',
                     hintStyle: TextStyle(
-                      color : Colors.grey
+                      color : MyApp.Theme[MyApp.selectedTheme]!["hintText"]
                     ),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0)
                   ),
                   style: TextStyle(
-                    fontSize: 30
+                    fontSize: 30,
+                    color: MyApp.Theme[MyApp.selectedTheme]!["text"]
                   ),
                 ),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: const Color.fromRGBO(211, 211, 211, 1),
+                    color: Color.fromRGBO(211, 211, 211, 1),
                     width: 4
                   ),
                   borderRadius: BorderRadius.circular(10)
@@ -160,14 +188,14 @@ class _BrokeMain extends State<BrokeMain> {
                 child : AnimatedButton(
                   onPressed: () async {
                     if (amountController.text != '') {
-                      player.play("greySucc.mp3");
+                      player.play(MyApp.Theme[MyApp.selectedTheme]!["soundSucc"]);
                       await spentDatabase.instance.accumulateAmount(
                         Spent(
                           date: _date,
                           amount: double.parse(amountController.text))
                         );
                     } else {
-                      player.play("greyDefault.mp3");
+                      player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
                     }
                     amountController.clear();
                   },
@@ -177,7 +205,7 @@ class _BrokeMain extends State<BrokeMain> {
                         fontSize: 30
                     ),
                   ),
-                  color: const Color.fromRGBO(169, 169, 169, 1),
+                  color: MyApp.Theme[MyApp.selectedTheme]!["brokeButton"],
                   width: 350,
                   height:  100,
                 ),
@@ -374,24 +402,24 @@ class _Analytics extends State<Analytics> {
                 children: [
                   AnimatedButton(
                       onPressed: () async {
-                        player.play("greyDefault.mp3");
+                        player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
                         await spentDatabase.instance.deleteAllRecords();
                         setState(() {
                         });
                         Navigator.pop(context);
                       },
                       child : Text("YES"),
-                      color: Color.fromRGBO(46,139,87, 1),
+                      color: MyApp.Theme[MyApp.selectedTheme]!["deleteYes"]!,
                       width: 100,
                       height: 32
                   ),
                   AnimatedButton(
                       onPressed: () {
-                        player.play("greyDefault.mp3");
+                        player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
                         Navigator.pop(context);
                       },
                       child: Text("NO"),
-                      color: Color.fromRGBO(128, 0, 0, 1),
+                      color: MyApp.Theme[MyApp.selectedTheme]!["deleteNo"]!,
                       width: 100,
                       height: 32
                   )

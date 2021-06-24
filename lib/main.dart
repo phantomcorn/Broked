@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusManager.instance.primaryFocus?.unfocus();
       },
       child : MaterialApp(
         title: 'Broked',
@@ -128,7 +128,6 @@ class _BrokeMain extends State<BrokeMain> {
                 child: TextFormField(
                   controller: amountController,
                   keyboardType: TextInputType.number,
-                  autofocus: true,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
                         RegExp('[0-9.,]+')

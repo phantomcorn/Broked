@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
 
   };
 
-  static String selectedTheme = "retro";
+  static String selectedTheme = "grey";
 
   @override
   Widget build(BuildContext context) {
@@ -399,9 +399,17 @@ class _Analytics extends State<Analytics> {
           height : MediaQuery.of(context).size.width / 2,
           child : Column(
             children: [
-              Text("Reset Database"),
+              Text("Reset Database",
+                style: TextStyle(
+                  color: Colors.black
+                )
+              ),
               SizedBox(height : 25),
-              Text("All input data you've previously entered will be erased. Are you sure?"),
+              Text("All input data you've previously entered will be erased. Are you sure?",
+                style: TextStyle(
+                  color: Colors.black
+                )
+              ),
               SizedBox(height : 40),
               Row(
                 children: [

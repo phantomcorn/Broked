@@ -11,7 +11,8 @@ import "Theme.dart";
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
-    [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
+  );
 
   runApp(MyApp());
 }
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
       "brokeButton" : Color.fromRGBO(169, 169, 169, 1),
       "deleteYes" : Color.fromRGBO(46,139,87, 1),
       "deleteNo" : Color.fromRGBO(128, 0, 0, 1),
+      "dialogShadow" : Colors.black,
+      "navBar" : Colors.white,
+      "navSelected" : Color.fromRGBO(105, 105, 105, 1),
       "soundDef" : "greyDefault.mp3",
       "soundSucc" : "greySucc.mp3"
     },
@@ -44,11 +48,12 @@ class MyApp extends StatelessWidget {
       "brokeButton" : Color.fromRGBO(254, 1, 254, 1),
       "deleteYes" : Color.fromRGBO(57, 255, 20, 1),
       "deleteNo" : Color.fromRGBO( 255, 7, 58, 1),
+      "dialogShadow" : Color.fromRGBO(57, 255, 20, 1),
+      "navBar" : Colors.black,
+      "navSelected" : Color.fromRGBO(224, 231, 34, 1),
       "soundDef" : "retroDefault.wav",
       "soundSucc" : "retroSucc.wav"
     }
-
-
   };
 
   static String selectedTheme = "grey";
@@ -112,7 +117,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         currentIndex: _selectedDisplay,
         onTap: onTabTapped,
-        selectedItemColor: Color.fromRGBO(105, 105, 105, 1),
+        backgroundColor: MyApp.Theme[MyApp.selectedTheme]!["navBar"],
+        selectedItemColor: MyApp.Theme[MyApp.selectedTheme]!["navSelected"],
         unselectedItemColor: Color.fromRGBO(220, 220, 220, 1)
       ),
     );
@@ -128,7 +134,6 @@ class BrokeMain extends StatefulWidget {
 }
 
 class _BrokeMain extends State<BrokeMain> {
-
 
   DateTime _date = DateTime.now();
   final amountController = TextEditingController();
@@ -200,8 +205,9 @@ class _BrokeMain extends State<BrokeMain> {
                       await spentDatabase.instance.accumulateAmount(
                         Spent(
                           date: _date,
-                          amount: double.parse(amountController.text))
-                        );
+                          amount: double.parse(amountController.text)
+                        )
+                      );
                     } else {
                       player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
                     }
@@ -375,7 +381,9 @@ class _Analytics extends State<Analytics> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
-                BoxShadow(color: Colors.black,offset: Offset(0,10),
+                BoxShadow(
+                    color: MyApp.Theme[MyApp.selectedTheme]!["dialogShadow"],
+                    offset: Offset(0,10),
                     blurRadius: 10
                 ),
               ]

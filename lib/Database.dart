@@ -50,6 +50,8 @@ class Spent {
 
 class spentDatabase {
 
+  //creds to : https://www.youtube.com/watch?v=UpKrhZ0Hppk
+
   static final spentDatabase instance = spentDatabase._init();
   static Database? _database;
   spentDatabase._init();

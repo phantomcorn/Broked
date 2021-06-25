@@ -138,6 +138,80 @@ class _BrokeMain extends State<BrokeMain> {
   DateTime _date = DateTime.now();
   final amountController = TextEditingController();
 
+  Widget brokeButton() {
+    return AnimatedButton(
+      onPressed: () async {
+        if (amountController.text != '') {
+          player.play(MyApp.Theme[MyApp.selectedTheme]!["soundSucc"]);
+          await spentDatabase.instance.accumulateAmount(
+              Spent(
+                  date: _date,
+                  amount: double.parse(amountController.text)
+              )
+          );
+        } else {
+          player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+        }
+        amountController.clear();
+      },
+      child: Text(
+        "BROKE!",
+        style: TextStyle(
+            fontSize: 30,
+            color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+        ),
+      ),
+      color: MyApp.Theme[MyApp.selectedTheme]!["brokeButton"],
+      width: 350,
+      height: 100,
+    );
+  }
+
+  Widget amountInput() {
+    return TextFormField(
+      controller: amountController,
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(
+            RegExp('[0-9.,]+')
+        ),
+        LengthLimitingTextInputFormatter(8),
+      ],
+      decoration: InputDecoration(
+          hintText: 'Amount',
+          hintStyle: TextStyle(
+              color : MyApp.Theme[MyApp.selectedTheme]!["hintText"]
+          ),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0)
+      ),
+      style: TextStyle(
+          fontSize: 30,
+          color: MyApp.Theme[MyApp.selectedTheme]!["text"]
+      ),
+    );
+  }
+
+  Widget datePicker() {
+    return TextButton(
+      onPressed : () {
+        DatePicker.showDatePicker(
+          context,
+          showTitleActions: true,
+          currentTime: _date,
+          minTime: DateTime(2000),
+          maxTime: DateTime.now(),
+          onConfirm: (date) {
+            setState(() =>
+              _date = date
+            );
+          }
+        );
+      },
+      child : Text("${DateFormat('dd MMM yyyy').format(_date)}")
+    );
+  }
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -145,88 +219,38 @@ class _BrokeMain extends State<BrokeMain> {
         body: Center(
           child : Column(
             children: <Widget> [
-              Container(
-                child : TextButton(
-                  onPressed : () {
-                    DatePicker.showDatePicker(
-                      context,
-                      showTitleActions: true,
-                      currentTime: _date,
-                      minTime: DateTime(2000),
-                      maxTime: DateTime.now(),
-                      onConfirm: (date) {
-                        setState(() =>
-                          _date = date
-                        );
-                      }
-                    );
-                  },
-                  child : Text("${DateFormat('dd MMM yyyy').format(_date)}")
-                ),
+              Align(
+                alignment: Alignment.topRight,
+                child : Container(
+                  margin: EdgeInsets.fromLTRB(20, 20, 20, 140),
+                  child: ElevatedButton(
+                    onPressed: () {
+
+                    },
+                    child: Text("Go LESS Broked")
+                  ),
+                )
               ),
               Container(
-                child: TextFormField(
-                  controller: amountController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp('[0-9.,]+')
-                    ),
-                    LengthLimitingTextInputFormatter(8),
-                  ],
-                  decoration: InputDecoration(
-                    hintText: 'Amount',
-                    hintStyle: TextStyle(
-                      color : MyApp.Theme[MyApp.selectedTheme]!["hintText"]
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0)
-                  ),
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: MyApp.Theme[MyApp.selectedTheme]!["text"]
-                  ),
-                ),
+                child : datePicker()
+              ),
+              Container(
+                width: 300,
+                margin: EdgeInsets.only(bottom : 50, top : 30),
+                child: amountInput(),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: MyApp.Theme[MyApp.selectedTheme]!["inputBorder"],
                     width: 4
                   ),
                   borderRadius: BorderRadius.circular(10)
-                ),
-                width: 300,
-                margin: EdgeInsets.only(bottom : 50, top : 30),
+                )
               ),
               Container(
-                child : AnimatedButton(
-                  onPressed: () async {
-                    if (amountController.text != '') {
-                      player.play(MyApp.Theme[MyApp.selectedTheme]!["soundSucc"]);
-                      await spentDatabase.instance.accumulateAmount(
-                        Spent(
-                          date: _date,
-                          amount: double.parse(amountController.text)
-                        )
-                      );
-                    } else {
-                      player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
-                    }
-                    amountController.clear();
-                  },
-                  child: Text(
-                    "BROKE!",
-                    style: TextStyle(
-                        fontSize: 30,
-                        color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
-                    ),
-                  ),
-                  color: MyApp.Theme[MyApp.selectedTheme]!["brokeButton"],
-                  width: 350,
-                  height:  100,
-                ),
+                child : brokeButton()
               )
             ],
-            mainAxisAlignment: MainAxisAlignment.center
+            mainAxisAlignment: MainAxisAlignment.start
           ),
         ),
       ),

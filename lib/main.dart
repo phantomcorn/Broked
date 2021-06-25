@@ -211,6 +211,15 @@ class _BrokeMain extends State<BrokeMain> {
       child : Text("${DateFormat('dd MMM yyyy').format(_date)}")
     );
   }
+
+  Widget budgetButton() {
+    return ElevatedButton(
+        onPressed: () {
+
+        },
+        child: Text("Go LESS Broked")
+    );
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -223,12 +232,7 @@ class _BrokeMain extends State<BrokeMain> {
                 alignment: Alignment.topRight,
                 child : Container(
                   margin: EdgeInsets.fromLTRB(20, 20, 20, 140),
-                  child: ElevatedButton(
-                    onPressed: () {
-
-                    },
-                    child: Text("Go LESS Broked")
-                  ),
+                  child: budgetButton()
                 )
               ),
               Container(

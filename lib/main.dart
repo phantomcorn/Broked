@@ -335,56 +335,21 @@ class _Analytics extends State<Analytics> {
               FutureBuilder(
                 future: spentDatabase.instance.getTotalSpendingMonthly(DateTime.now().month),
                 builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                  String month;
-                  switch(DateTime.now().month) {
-                    case 1 :
-                      month = 'january';
-                      break;
-                    case 2:
-                      month = 'february';
-                      break;
-                    case 3:
-                      month = 'march';
-                      break;
-                    case 4 :
-                      month = 'april';
-                      break;
-                    case 5:
-                      month = 'may';
-                      break;
-                    case 6:
-                      month = 'june';
-                      break;
-                    case 7 :
-                      month = 'july';
-                      break;
-                    case 8:
-                      month = 'august';
-                      break;
-                    case 9:
-                      month = 'september';
-                      break;
-                    case 10 :
-                      month = 'october';
-                      break;
-                    case 11:
-                      month = 'november';
-                      break;
-                    default :
-                      month = 'december';
-                      break;
-                  }
+                  String month = DateFormat("MMMM")
+                      .format(DateTime.now())
+                      .toLowerCase();
                   if (snapshot.hasData) {
-                    return Text("total spending this month ($month) : ${snapshot.data.toString()}",
+                    return Text("total spending this month "
+                      "($month) : ${snapshot.data.toString()}",
                       style: TextStyle(
                             fontSize: 14
                       )
                     );
                   } else {
                     return Text("total spending this month ($month) : ",
-                        style: TextStyle(
-                            fontSize: 14
-                        )
+                      style: TextStyle(
+                        fontSize: 14
+                      )
                     );
                   }
                 }

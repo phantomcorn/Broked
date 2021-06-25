@@ -137,6 +137,7 @@ class _BrokeMain extends State<BrokeMain> {
 
   DateTime _date = DateTime.now();
   final amountController = TextEditingController();
+  final budgetController = TextEditingController();
 
   Widget brokeButton() {
     return AnimatedButton(
@@ -167,13 +168,13 @@ class _BrokeMain extends State<BrokeMain> {
     );
   }
 
-  Widget amountInput() {
+  Widget inputField(TextEditingController controller) {
     return TextFormField(
-      controller: amountController,
+      controller: controller,
       keyboardType: TextInputType.number,
       inputFormatters: [
         FilteringTextInputFormatter.allow(
-            RegExp('[0-9.,]+')
+          RegExp('[0-9.,]+')
         ),
         LengthLimitingTextInputFormatter(8),
       ],
@@ -215,12 +216,74 @@ class _BrokeMain extends State<BrokeMain> {
   Widget budgetButton() {
     return ElevatedButton(
         onPressed: () {
-
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                elevation: 0,
+                backgroundColor: Colors.white,
+                child: budgetDialog(context)
+              );
+            }
+          );
         },
         child: Text("Go LESS Broked")
     );
   }
-  
+
+  Widget budgetDialog(context) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: MyApp.Theme[MyApp.selectedTheme]!["dialogShadow"],
+                offset: Offset(0,10),
+                blurRadius: 10
+              )
+            ]
+          ),
+          width: MediaQuery.of(context).size.height / 1.5,
+          height : MediaQuery.of(context).size.width / 2,
+          child : Column(
+            children: [
+              Text(
+                "Enter budget for this month",
+                style: TextStyle(
+                  color: Colors.black
+                )
+              ),
+              SizedBox(height : 20),
+              inputField(budgetController),
+              SizedBox(height : 15),
+              AnimatedButton(
+                onPressed: () {
+                  player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+                  Navigator.pop(context);
+                },
+                child: Text("DONE",
+                    style: TextStyle(
+                        color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+                    )
+                ),
+                width: 100,
+                height: 32
+              )
+            ],
+          )
+        )
+      ]
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -241,7 +304,7 @@ class _BrokeMain extends State<BrokeMain> {
               Container(
                 width: 300,
                 margin: EdgeInsets.only(bottom : 50, top : 30),
-                child: amountInput(),
+                child: inputField(amountController),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: MyApp.Theme[MyApp.selectedTheme]!["inputBorder"],

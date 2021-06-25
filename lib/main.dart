@@ -265,9 +265,16 @@ class _BrokeMain extends State<BrokeMain> {
               inputField(budgetController),
               SizedBox(height : 15),
               AnimatedButton(
-                onPressed: () {
-                  player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
-                  Navigator.pop(context);
+                onPressed: () async {
+                  if (budgetController.text != '') {
+                    player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+                    await spentDatabase.instance.addBudget(
+                      double.parse(
+                        budgetController.text
+                      )
+                    );
+                    Navigator.pop(context);
+                  }
                 },
                 child: Text("DONE",
                     style: TextStyle(

@@ -30,6 +30,8 @@ class MyApp extends StatelessWidget {
       "inputBorder" : Color.fromRGBO(211, 211, 211, 1),
       "dateButton" : Color.fromRGBO(128, 128, 128, 1),
       "brokeButton" : Color.fromRGBO(169, 169, 169, 1),
+      "budgetButton" : Color.fromRGBO(169, 169, 169, 1),
+      "sumButton" : Color.fromRGBO(169, 169, 169, 1),
       "deleteYes" : Color.fromRGBO(46,139,87, 1),
       "deleteNo" : Color.fromRGBO(128, 0, 0, 1),
       "dialogShadow" : Colors.black,
@@ -46,6 +48,8 @@ class MyApp extends StatelessWidget {
       "inputBorder" : Color.fromRGBO(224,231,34, 1),
       "dateButton" : Color.fromRGBO(0, 255, 255, 1),
       "brokeButton" : Color.fromRGBO(254, 1, 254, 1),
+      "budgetButton" : Color.fromRGBO(255, 7, 58, 1),
+      "sumButton" : Color.fromRGBO(255, 7, 58, 1),
       "deleteYes" : Color.fromRGBO(57, 255, 20, 1),
       "deleteNo" : Color.fromRGBO( 255, 7, 58, 1),
       "dialogShadow" : Color.fromRGBO(57, 255, 20, 1),
@@ -168,9 +172,9 @@ class _BrokeMain extends State<BrokeMain> {
     );
   }
 
-  Widget inputField(TextEditingController controller) {
+  Widget inputAmount() {
     return TextFormField(
-      controller: controller,
+      controller: amountController,
       keyboardType: TextInputType.number,
       inputFormatters: [
         FilteringTextInputFormatter.allow(
@@ -230,7 +234,15 @@ class _BrokeMain extends State<BrokeMain> {
             }
           );
         },
-        child: Text("Go LESS Broked")
+        child: Text(
+            "Go LESS Broked",
+            style: TextStyle(
+              color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+            )
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: MyApp.Theme[MyApp.selectedTheme]!["budgetButton"]
+        )
     );
   }
 
@@ -262,19 +274,20 @@ class _BrokeMain extends State<BrokeMain> {
                 )
               ),
               SizedBox(height : 20),
-              inputField(budgetController),
+              inputBudget(),
               SizedBox(height : 15),
               AnimatedButton(
                 onPressed: () async {
                   if (budgetController.text != '') {
-                    player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
                     await spentDatabase.instance.addBudget(
                       double.parse(
                         budgetController.text
                       )
                     );
-                    Navigator.pop(context);
                   }
+
+                  player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+                  Navigator.pop(context);
                 },
                 child: Text("DONE",
                     style: TextStyle(
@@ -291,6 +304,161 @@ class _BrokeMain extends State<BrokeMain> {
     );
   }
 
+  Widget inputBudget() {
+    return TextFormField(
+      controller: budgetController,
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(
+            RegExp('[0-9.,]+')
+        ),
+        LengthLimitingTextInputFormatter(8),
+      ],
+      decoration: InputDecoration(
+          hintText: 'Budget',
+          hintStyle: TextStyle(
+              color : Colors.black
+          ),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0)
+      ),
+      style: TextStyle(
+          fontSize: 30,
+          color: Colors.black
+      ),
+    );
+  }
+
+  Widget summaryButton() {
+    return ElevatedButton(
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    elevation: 0,
+                    backgroundColor: Colors.white,
+                    child: endOfMonthSummary(context)
+                );
+              }
+          );
+        },
+      child: Text(
+          "Summary",
+          style: TextStyle(
+              color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+          )
+      ),
+      style: ElevatedButton.styleFrom(
+          primary: MyApp.Theme[MyApp.selectedTheme]!["budgetButton"]
+      )
+    );
+  }
+
+
+  Widget endOfMonthSummary(context) {
+    return Stack(
+      children: [
+        Container(
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            shape :BoxShape.rectangle,
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: MyApp.Theme[MyApp.selectedTheme]!["dialogShadow"],
+                offset:  Offset(0, 10),
+                blurRadius: 10
+              )
+            ]
+          ),
+          width: MediaQuery.of(context).size.height / 1.5,
+          height: MediaQuery.of(context).size.width,
+          child : Column(
+            children: [
+              FutureBuilder(
+                future: spentDatabase.instance.getBudgetThisMonth(),
+                builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                  if (snapshot.hasData) {
+                    return Text("Budget this month: ${snapshot.data}",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color : Colors.black
+                        )
+                    );
+                  } else {
+                    return Text("Budget this month: ",
+                        style: TextStyle(
+                            fontSize: 14,
+                            color : Colors.black
+                        )
+                    );
+                  }
+                }
+              ),
+              SizedBox(height : 20),
+              FutureBuilder(
+                  future: spentDatabase.instance.getOverUnderSpent(),
+                  builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                    if (snapshot.hasData) {
+                      return RichText(
+                          text: TextSpan(
+                            text: "Leftover: ",
+                            style : TextStyle(
+                              fontSize: 14,
+                              color: Colors.black
+                            ),
+                            children: [
+                              TextSpan(
+                                text: snapshot.data.toString(),
+                                style: TextStyle(
+                                  color: (snapshot.data! > 0)
+                                      ? Color.fromRGBO(50, 205, 50, 1)
+                                      : (snapshot.data! < 0)
+                                      ? Color.fromRGBO(221, 0, 4, 1)
+                                      : Colors.black
+                                )
+                              )
+                            ]
+                          )
+                      );
+                    } else {
+                      return Text(
+                        "Leftover: ",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14
+                        )
+                      );
+                    }
+                  }
+              ),
+              AnimatedButton(
+                  onPressed: () async {
+                    player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                      "Understood",
+                      style: TextStyle(
+                          color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+                      )
+                  ),
+                  width: 100,
+                  height: 32
+              )
+            ],
+          )
+        )
+      ],
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -298,11 +466,15 @@ class _BrokeMain extends State<BrokeMain> {
         body: Center(
           child : Column(
             children: <Widget> [
-              Align(
-                alignment: Alignment.topRight,
-                child : Container(
-                  margin: EdgeInsets.fromLTRB(20, 20, 20, 140),
-                  child: budgetButton()
+              Container(
+                margin: EdgeInsets.fromLTRB(20, 20, 20, 140),
+                child : Row(
+                  children: [
+                    summaryButton(),
+                    Spacer(),
+                    budgetButton()
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 )
               ),
               Container(
@@ -311,7 +483,7 @@ class _BrokeMain extends State<BrokeMain> {
               Container(
                 width: 300,
                 margin: EdgeInsets.only(bottom : 50, top : 30),
-                child: inputField(amountController),
+                child: inputAmount(),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: MyApp.Theme[MyApp.selectedTheme]!["inputBorder"],

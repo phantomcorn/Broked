@@ -594,7 +594,7 @@ class _Analytics extends State<Analytics> {
               ),
 
               FutureBuilder(
-                future: spentDatabase.instance.getTotalSpendingYearly(DateTime.now().year),
+                future: spentDatabase.instance.getSpendingThisYear(),
                 builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                   if (snapshot.hasData) {
                     return Text("annual spending: ${snapshot.data}",
@@ -613,7 +613,7 @@ class _Analytics extends State<Analytics> {
               ),
 
               FutureBuilder(
-                future: spentDatabase.instance.getTotalSpendingMonthly(DateTime.now().month),
+                future: spentDatabase.instance.getSpendingThisMonth(),
                 builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                   String month = DateFormat("MMMM")
                       .format(DateTime.now())

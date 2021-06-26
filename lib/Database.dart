@@ -75,7 +75,7 @@ class spentDatabase {
   Future<Database> _initDB(String filename) async {
     final dbPath = await getDatabasesPath();
     var path = join(dbPath, filename);
-    
+
     return await openDatabase(path, version : 1, onCreate: _createDB);
   }
 
@@ -193,11 +193,10 @@ class spentDatabase {
     final db = await instance.database;
     DateTime now = DateTime.now();
     if (await getSpendingByDate(startOfMonth(now)) == 0) {
-      print("creating new");
       Spent spent = Spent(
-        date: startOfMonth(now),
-        amount: 0,
-        budget: budget
+          date: startOfMonth(now),
+          amount: 0,
+          budget: budget
       );
       await accumulateAmount(spent);
     } else {
@@ -210,14 +209,43 @@ class spentDatabase {
     }
   }
 
-  
+  Future<double> getBudgetByDate(DateTime date) async {
+    final db = await instance.database;
+    final map = await db.query(
+        'spent',
+        columns: ['date','amountSpent','budget'],
+        where: 'date = ?',
+        whereArgs: [startOfMonth(date)]);
+
+
+    if (map.isEmpty) {
+      return 0;
+    }
+    return map.first['budget'] as double;
+  }
+
+  Future<double> getOverUnderSpent() async {
+    return await getBudgetThisMonth() - await getSpendingThisMonth();
+  }
+
+  Future<double> getBudgetThisMonth() async {
+    return await getBudgetByDate(DateTime.now());
+  }
 
   Future<double> getSpendingToday() async {
     return await getSpendingByDate(DateTime.now());
   }
 
+  Future<double> getSpendingThisMonth () async {
+    return await getTotalSpendingMonthly(DateTime.now().month);
+  }
+
+  Future<double> getSpendingThisYear () async {
+    return await getTotalSpendingYearly(DateTime.now().year);
+  }
+
   Future<double> getAvgSpending(int year) async {
-    return (await getTotalSpendingYearly(year) / noOfMonths).roundToDouble() ;
+    return (await getTotalSpendingYearly(year) / noOfMonths).roundToDouble();
   }
 
 }

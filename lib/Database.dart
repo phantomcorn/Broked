@@ -204,7 +204,7 @@ class spentDatabase {
           """UPDATE spent
              SET budget = ?
              WHERE date = ? """,
-          [DateTime(now.year, now.month, 1)]
+          [Spent.dateToSQLFormat(DateTime(now.year, now.month, 1))]
       );
     }
   }
@@ -215,7 +215,7 @@ class spentDatabase {
         'spent',
         columns: ['date','amountSpent','budget'],
         where: 'date = ?',
-        whereArgs: [startOfMonth(date)]);
+        whereArgs: [Spent.dateToSQLFormat(startOfMonth(date))]);
 
 
     if (map.isEmpty) {

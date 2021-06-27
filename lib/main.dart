@@ -466,6 +466,7 @@ class _BrokeMain extends State<BrokeMain> {
         body: Center(
           child : Column(
             children: <Widget> [
+              /*
               Container(
                 margin: EdgeInsets.fromLTRB(20, 20, 20, 140),
                 child : Row(
@@ -477,8 +478,10 @@ class _BrokeMain extends State<BrokeMain> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 )
               ),
+              */
               Container(
-                child : datePicker()
+                child : datePicker(),
+                margin: EdgeInsets.fromLTRB(20, 200, 20, 0)
               ),
               Container(
                 width: 300,
@@ -522,119 +525,230 @@ class _Analytics extends State<Analytics> {
     return SafeArea(
       child: Scaffold(
         body: Center(
-          child : Column(
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child : IconButton(
-                  icon : Icon(Icons.delete),
-                  color: Color.fromRGBO(220, 220, 220, 1),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                              BorderRadius.circular(10),
-                          ),
-                          elevation: 0,
-                          backgroundColor: Colors.white,
-                          child: PopUpBox(context),
-                        );
-                      }
-                    );
-                  }
-                )
-              ),
-              Container(
-                child : Text("analytics : ",
-                  style: TextStyle(
-                    fontSize: 16
+          child : Container(
+            child : Column(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child : IconButton(
+                    icon : Icon(Icons.delete),
+                    color: Color.fromRGBO(220, 220, 220, 1),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                BorderRadius.circular(10),
+                            ),
+                            elevation: 0,
+                            backgroundColor: Colors.white,
+                            child: PopUpBox(context),
+                          );
+                        }
+                      );
+                    }
                   )
                 ),
-                margin: EdgeInsets.only(bottom : 40)
-              ),
-              FutureBuilder(
-                future: spentDatabase.instance.getSpendingToday(),
-                  builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                    if (snapshot.hasData) {
-                      return Text("spent today: ${snapshot.data.toString()}",
-                        style: TextStyle(
-                          fontSize: 14
-                        )
-                      );
-                    } else {
-                      return Text("spent today: ",
-                          style: TextStyle(
-                              fontSize: 14
-                          )
-                      );
-                    }
-                  }
-              ),
-
-              FutureBuilder(
-                  future: spentDatabase.instance.getAvgSpending(DateTime.now().year),
-                  builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                    if (snapshot.hasData) {
-                      return Text("avg spending per month: ${snapshot.data}",
-                        style: TextStyle(
-                           fontSize: 14
-                        )
-                      );
-                    } else {
-                      return Text("avg spending per month: ",
-                          style: TextStyle(
-                              fontSize: 14
-                          )
-                      );
-                    }
-                  }
-              ),
-
-              FutureBuilder(
-                future: spentDatabase.instance.getSpendingThisYear(),
-                builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                  if (snapshot.hasData) {
-                    return Text("annual spending: ${snapshot.data}",
-                      style: TextStyle(
-                        fontSize: 14
-                      )
-                    );
-                  } else {
-                    return Text("annual spending: ",
-                        style: TextStyle(
-                            fontSize: 14
-                        )
-                    );
-                  }
-                }
-              ),
-
-              FutureBuilder(
-                future: spentDatabase.instance.getSpendingThisMonth(),
-                builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                  String month = DateFormat("MMMM")
-                      .format(DateTime.now())
-                      .toLowerCase();
-                  if (snapshot.hasData) {
-                    return Text("total spending this month "
-                      "($month) : ${snapshot.data.toString()}",
-                      style: TextStyle(
-                            fontSize: 14
-                      )
-                    );
-                  } else {
-                    return Text("total spending this month ($month) : ",
-                      style: TextStyle(
-                        fontSize: 14
-                      )
-                    );
-                  }
-                }
-              ),
-            ],
+                Container(
+                  child : Column(
+                    children: [
+                      Container(
+                          child : Text("analytics",
+                              style: TextStyle(
+                                  fontSize: 16
+                              )
+                          ),
+                          margin: EdgeInsets.only(bottom : 40)
+                      ),
+                      FutureBuilder(
+                          future: spentDatabase.instance.getSpendingToday(),
+                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                  children : [
+                                    Text("spent today: ",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    ),
+                                    Spacer(),
+                                    Text("${snapshot.data.toString()}",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    )
+                                  ]
+                              );
+                            } else {
+                              return Text("spent today: ",
+                                  style: TextStyle(
+                                      fontSize: 14
+                                  )
+                              );
+                            }
+                          }
+                      ),
+                      SizedBox(height: 20),
+                      FutureBuilder(
+                          future: spentDatabase.instance.getAvgSpending(DateTime.now().year),
+                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                  children : [
+                                    Text("avg spending per month: ",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    ),
+                                    Spacer(),
+                                    Text("${snapshot.data}",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    )
+                                  ]
+                              );
+                            } else {
+                              return Text("avg spending per month: ",
+                                  style: TextStyle(
+                                      fontSize: 14
+                                  )
+                              );
+                            }
+                          }
+                      ),
+                      SizedBox(height: 20),
+                      FutureBuilder(
+                          future: spentDatabase.instance.getSpendingThisYear(),
+                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                  children : [
+                                    Text("annual spending: ",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    ),
+                                    Spacer(),
+                                    Text("${snapshot.data}",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    )
+                                  ]
+                              );
+                            } else {
+                              return Text("annual spending: ",
+                                  style: TextStyle(
+                                      fontSize: 14
+                                  )
+                              );
+                            }
+                          }
+                      ),
+                      SizedBox(height: 20),
+                      FutureBuilder(
+                          future: spentDatabase.instance.getBudgetThisMonth(),
+                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                  children : [
+                                    Text("budget: ",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    ),
+                                    Spacer(),
+                                    Text("${snapshot.data}",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    )
+                                  ]
+                              );
+                            } else {
+                              return Text("budget: ",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color : MyApp.Theme[MyApp.selectedTheme]!["text"]
+                                  )
+                              );
+                            }
+                          }
+                      ),
+                      SizedBox(height: 20),
+                      FutureBuilder(
+                          future: spentDatabase.instance.getSpendingThisMonth(),
+                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                  children : [
+                                    Text("spent this month: ",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    ),
+                                    Spacer(),
+                                    Text("${snapshot.data}",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    )
+                                  ]
+                              );
+                            } else {
+                              return Text("spent this month: ",
+                                  style: TextStyle(
+                                      fontSize: 14
+                                  )
+                              );
+                            }
+                          }
+                      ),
+                      SizedBox(height: 20),
+                      FutureBuilder(
+                          future: spentDatabase.instance.getOverUnderSpent(),
+                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                children: [
+                                  Text("leftover: ",
+                                      style: TextStyle(
+                                          fontSize: 14
+                                      )
+                                  ),
+                                  Spacer(),
+                                  Text("${snapshot.data}",
+                                    style: TextStyle(
+                                      color: (snapshot.data! > 0) ?
+                                        Color.fromRGBO(50, 205, 50, 1)
+                                          : (snapshot.data! < 0) ?
+                                        Color.fromRGBO(221, 0, 4, 1)
+                                          : MyApp.Theme[MyApp.selectedTheme]!["text"]
+                                    )
+                                  )
+                                ],
+                              );
+                            } else {
+                              return Text(
+                                  "leftover: ",
+                                  style: TextStyle(
+                                      color: MyApp.Theme[MyApp.selectedTheme]!["text"],
+                                      fontSize: 14
+                                  )
+                              );
+                            }
+                          }
+                      ),
+                    ],
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  ),
+                  margin: EdgeInsets.only(left : 110, right : 110)
+                )
+              ],
+            ),
           )
         ),
       )

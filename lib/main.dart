@@ -175,15 +175,18 @@ class _BrokeMain extends State<BrokeMain> {
   Widget inputAmount() {
     return TextFormField(
       controller: amountController,
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.numberWithOptions(
+        decimal: true,
+        signed: false
+      ),
       inputFormatters: [
         FilteringTextInputFormatter.allow(
-          RegExp('[0-9.,]+')
+          RegExp(r"^\d+\.?\d?$").
         ),
         LengthLimitingTextInputFormatter(8),
       ],
       decoration: InputDecoration(
-          hintText: 'Amount',
+          hintText: 'Amount    1 dp',
           hintStyle: TextStyle(
               color : MyApp.Theme[MyApp.selectedTheme]!["hintText"]
           ),
@@ -307,7 +310,10 @@ class _BrokeMain extends State<BrokeMain> {
   Widget inputBudget() {
     return TextFormField(
       controller: budgetController,
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.numberWithOptions(
+          decimal: true,
+          signed: false
+      ),
       inputFormatters: [
         FilteringTextInputFormatter.allow(
             RegExp('[0-9.,]+')
@@ -559,6 +565,36 @@ class _Analytics extends State<Analytics> {
                           margin: EdgeInsets.only(bottom : 40)
                       ),
                       FutureBuilder(
+                          future: spentDatabase.instance.getBudgetThisMonth(),
+                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                  children : [
+                                    Text("budget: ",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    ),
+                                    Spacer(),
+                                    Text("${snapshot.data!.toStringAsFixed(1)}",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    )
+                                  ]
+                              );
+                            } else {
+                              return Text("budget: ",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color : MyApp.Theme[MyApp.selectedTheme]!["text"]
+                                  )
+                              );
+                            }
+                          }
+                      ),
+                      SizedBox(height: 20),
+                      FutureBuilder(
                           future: spentDatabase.instance.getSpendingToday(),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
@@ -570,7 +606,7 @@ class _Analytics extends State<Analytics> {
                                         )
                                     ),
                                     Spacer(),
-                                    Text("${snapshot.data.toString()}",
+                                    Text("${snapshot.data!.toStringAsFixed(1)}",
                                         style: TextStyle(
                                             fontSize: 14
                                         )
@@ -588,18 +624,18 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: spentDatabase.instance.getAvgSpending(DateTime.now().year),
+                          future: spentDatabase.instance.getSpendingThisMonth(),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
                                   children : [
-                                    Text("avg spending per month: ",
+                                    Text("spent this month: ",
                                         style: TextStyle(
                                             fontSize: 14
                                         )
                                     ),
                                     Spacer(),
-                                    Text("${snapshot.data}",
+                                    Text("${snapshot.data!.toStringAsFixed(1)}",
                                         style: TextStyle(
                                             fontSize: 14
                                         )
@@ -607,7 +643,7 @@ class _Analytics extends State<Analytics> {
                                   ]
                               );
                             } else {
-                              return Text("avg spending per month: ",
+                              return Text("spent this month: ",
                                   style: TextStyle(
                                       fontSize: 14
                                   )
@@ -628,7 +664,7 @@ class _Analytics extends State<Analytics> {
                                         )
                                     ),
                                     Spacer(),
-                                    Text("${snapshot.data}",
+                                    Text("${snapshot.data!.toStringAsFixed(1)}",
                                         style: TextStyle(
                                             fontSize: 14
                                         )
@@ -646,18 +682,18 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: spentDatabase.instance.getBudgetThisMonth(),
+                          future: spentDatabase.instance.getAvgSpending(DateTime.now().year),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
                                   children : [
-                                    Text("budget: ",
+                                    Text("avg spending per month: ",
                                         style: TextStyle(
                                             fontSize: 14
                                         )
                                     ),
                                     Spacer(),
-                                    Text("${snapshot.data}",
+                                    Text("${snapshot.data!.toStringAsFixed(1)}",
                                         style: TextStyle(
                                             fontSize: 14
                                         )
@@ -665,37 +701,7 @@ class _Analytics extends State<Analytics> {
                                   ]
                               );
                             } else {
-                              return Text("budget: ",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color : MyApp.Theme[MyApp.selectedTheme]!["text"]
-                                  )
-                              );
-                            }
-                          }
-                      ),
-                      SizedBox(height: 20),
-                      FutureBuilder(
-                          future: spentDatabase.instance.getSpendingThisMonth(),
-                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                            if (snapshot.hasData) {
-                              return Row(
-                                  children : [
-                                    Text("spent this month: ",
-                                        style: TextStyle(
-                                            fontSize: 14
-                                        )
-                                    ),
-                                    Spacer(),
-                                    Text("${snapshot.data}",
-                                        style: TextStyle(
-                                            fontSize: 14
-                                        )
-                                    )
-                                  ]
-                              );
-                            } else {
-                              return Text("spent this month: ",
+                              return Text("avg spending per month: ",
                                   style: TextStyle(
                                       fontSize: 14
                                   )
@@ -704,6 +710,8 @@ class _Analytics extends State<Analytics> {
                           }
                       ),
                       SizedBox(height: 20),
+
+
                       FutureBuilder(
                           future: spentDatabase.instance.getOverUnderSpent(),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -716,7 +724,7 @@ class _Analytics extends State<Analytics> {
                                       )
                                   ),
                                   Spacer(),
-                                  Text("${snapshot.data}",
+                                  Text("${snapshot.data!.toStringAsFixed(1)}",
                                     style: TextStyle(
                                       color: (snapshot.data! > 0) ?
                                         Color.fromRGBO(50, 205, 50, 1)
@@ -741,7 +749,7 @@ class _Analytics extends State<Analytics> {
                     ],
                     crossAxisAlignment: CrossAxisAlignment.start,
                   ),
-                  margin: EdgeInsets.only(left : 110, right : 110)
+                  margin: EdgeInsets.only(left : 90, right : 90)
                 )
               ],
             ),

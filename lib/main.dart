@@ -466,22 +466,18 @@ class _BrokeMain extends State<BrokeMain> {
         body: Center(
           child : Column(
             children: <Widget> [
-              /*
               Container(
                 margin: EdgeInsets.fromLTRB(20, 20, 20, 140),
                 child : Row(
                   children: [
-                    summaryButton(),
                     Spacer(),
                     budgetButton()
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 )
               ),
-              */
               Container(
-                child : datePicker(),
-                margin: EdgeInsets.fromLTRB(20, 200, 20, 0)
+                child : datePicker()
               ),
               Container(
                 width: 300,

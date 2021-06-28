@@ -142,6 +142,7 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
   DateTime _date = DateTime.now();
   late AnimationController _controller;
   final budgetController = TextEditingController();
+  final positiveRealOneDP = RegExp(r"^\d*(\.\d)?$");
 
   @override
   void initState() {
@@ -169,7 +170,8 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
   Widget brokeButton() {
     return AnimatedButton(
       onPressed: () async {
-        if (InputAmount.amountController.text != '') {
+        if (positiveRealOneDP.hasMatch(InputAmount.amountController.text)
+          && InputAmount.amountController.text != '') {
           player.play(MyApp.Theme[MyApp.selectedTheme]!["soundSucc"]);
           await spentDatabase.instance.accumulateAmount(
               Spent(
@@ -877,7 +879,7 @@ class InputAmount extends StatelessWidget {
           ),
           inputFormatters: [
             FilteringTextInputFormatter.allow(
-                RegExp(r"^\d+\.?\d?$")
+                RegExp(r"[\d.]+")
             ),
             LengthLimitingTextInputFormatter(8),
           ],

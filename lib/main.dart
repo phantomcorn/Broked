@@ -137,27 +137,51 @@ class BrokeMain extends StatefulWidget {
 
 }
 
-class _BrokeMain extends State<BrokeMain> {
+class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
 
   DateTime _date = DateTime.now();
-  final amountController = TextEditingController();
+  late AnimationController _controller;
   final budgetController = TextEditingController();
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 600)
+    );
+
+
+    _controller.addStatusListener( (status) {
+      if (status == AnimationStatus.completed) {
+        _controller.reverse();
+      }
+    });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   Widget brokeButton() {
     return AnimatedButton(
       onPressed: () async {
-        if (amountController.text != '') {
+        if (InputAmount.amountController.text != '') {
           player.play(MyApp.Theme[MyApp.selectedTheme]!["soundSucc"]);
           await spentDatabase.instance.accumulateAmount(
               Spent(
                   date: _date,
-                  amount: double.parse(amountController.text)
+                  amount: double.parse(InputAmount.amountController.text)
               )
           );
         } else {
+          _controller.forward();
           player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
         }
-        amountController.clear();
+        InputAmount.amountController.clear();
       },
       child: Text(
         "BROKE!",
@@ -169,34 +193,6 @@ class _BrokeMain extends State<BrokeMain> {
       color: MyApp.Theme[MyApp.selectedTheme]!["brokeButton"],
       width: 350,
       height: 100,
-    );
-  }
-
-  Widget inputAmount() {
-    return TextFormField(
-      controller: amountController,
-      keyboardType: TextInputType.numberWithOptions(
-        decimal: true,
-        signed: false
-      ),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(
-          RegExp(r"^\d+\.?\d?$").
-        ),
-        LengthLimitingTextInputFormatter(8),
-      ],
-      decoration: InputDecoration(
-          hintText: 'Amount    1 dp',
-          hintStyle: TextStyle(
-              color : MyApp.Theme[MyApp.selectedTheme]!["hintText"]
-          ),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0)
-      ),
-      style: TextStyle(
-          fontSize: 30,
-          color: MyApp.Theme[MyApp.selectedTheme]!["text"]
-      ),
     );
   }
 
@@ -467,6 +463,7 @@ class _BrokeMain extends State<BrokeMain> {
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child : Scaffold(
         body: Center(
@@ -485,18 +482,25 @@ class _BrokeMain extends State<BrokeMain> {
               Container(
                 child : datePicker()
               ),
-              Container(
-                width: 300,
-                margin: EdgeInsets.only(bottom : 50, top : 30),
-                child: inputAmount(),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: MyApp.Theme[MyApp.selectedTheme]!["inputBorder"],
-                    width: 4
-                  ),
-                  borderRadius: BorderRadius.circular(10)
-                )
+              InputAmount(
+                  controller: _controller
               ),
+              /*
+              AnimatedBuilder(
+                animation : _controller,
+                builder : (context, child) {
+                  return Container(
+                      //margin: EdgeInsets.symmetric(horizontal : 24),
+                      padding: EdgeInsets.only(
+                          left: _offsetAnimation.value + 30.0,
+                          right: 30.0 - _offsetAnimation.value
+                      ),
+                      child: inputAmount(),
+                  );
+                }
+              ),
+
+               */
               Container(
                 child : brokeButton()
               )
@@ -835,6 +839,88 @@ class _Analytics extends State<Analytics> {
     );
   }
 
+}
 
+class InputAmount extends StatelessWidget {
+
+  static TextEditingController amountController = TextEditingController();
+  final AnimationController controller;
+  final Animation _offsetAnimation;
+  final Animation _colorAnimation;
+
+  InputAmount({required this.controller})
+  : _offsetAnimation = Tween(
+      begin : 0.0,
+      end : 30.0
+    ).chain(
+      CurveTween(
+          curve: Curves.elasticIn
+      )
+    ).animate(controller),
+
+
+    _colorAnimation = ColorTween(
+      begin : MyApp.Theme[MyApp.selectedTheme]!["inputBorder"],
+      end: Colors.redAccent
+    ).animate(controller);
+
+
+  Widget inputAmount() {
+    return Container(
+        width: 300,
+        margin: EdgeInsets.only(bottom: 50, top: 30),
+        child: TextFormField(
+          controller: amountController,
+          keyboardType: TextInputType.numberWithOptions(
+              decimal: true,
+              signed: false
+          ),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(
+                RegExp(r"^\d+\.?\d?$")
+            ),
+            LengthLimitingTextInputFormatter(8),
+          ],
+          decoration: InputDecoration(
+              hintText: 'Amount',
+              hintStyle: TextStyle(
+                  color: MyApp.Theme[MyApp.selectedTheme]!["hintText"]
+              ),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: 20.0, horizontal: 10.0)
+          ),
+          style: TextStyle(
+              fontSize: 30,
+              color: MyApp.Theme[MyApp.selectedTheme]!["text"]
+          ),
+
+        ),
+        decoration: BoxDecoration(
+            border: Border.all(
+                color: _colorAnimation.value,
+                width: 4
+            ),
+            borderRadius: BorderRadius.circular(10)
+        )
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+        animation : controller,
+        builder : (context, child) {
+          return Container(
+            //margin: EdgeInsets.symmetric(horizontal : 24),
+            padding: EdgeInsets.only(
+                left: _offsetAnimation.value + 30.0,
+                right: 30.0 - _offsetAnimation.value
+            ),
+            child: inputAmount(),
+          );
+        }
+    );
+  }
 }
 

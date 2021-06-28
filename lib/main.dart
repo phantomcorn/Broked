@@ -487,22 +487,6 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
               InputAmount(
                   controller: _controller
               ),
-              /*
-              AnimatedBuilder(
-                animation : _controller,
-                builder : (context, child) {
-                  return Container(
-                      //margin: EdgeInsets.symmetric(horizontal : 24),
-                      padding: EdgeInsets.only(
-                          left: _offsetAnimation.value + 30.0,
-                          right: 30.0 - _offsetAnimation.value
-                      ),
-                      child: inputAmount(),
-                  );
-                }
-              ),
-
-               */
               Container(
                 child : brokeButton()
               )

@@ -61,7 +61,7 @@ class spentDatabase {
   static Database? _database;
   spentDatabase._init();
 
-  static final int noOfMonths = 12;
+  static final double noOfMonths = 12.0;
 
   Future<Database> get database async {
     if (_database != null) {
@@ -245,7 +245,7 @@ class spentDatabase {
   }
 
   Future<double> getAvgSpending(int year) async {
-    return (await getTotalSpendingYearly(year) / noOfMonths).roundToDouble();
+    return (await getTotalSpendingYearly(year) / noOfMonths);
   }
 
 }

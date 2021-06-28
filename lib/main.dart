@@ -271,7 +271,8 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
               Text(
                 "Enter budget for this month",
                 style: TextStyle(
-                  color: Colors.black
+                  color: Colors.black,
+                  fontSize: 15
                 )
               ),
               SizedBox(height : 20),
@@ -321,7 +322,8 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
       decoration: InputDecoration(
           hintText: 'Budget',
           hintStyle: TextStyle(
-              color : Colors.black
+              color : Colors.black,
+              fontSize: 25
           ),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0)

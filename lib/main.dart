@@ -314,7 +314,7 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
       ),
       inputFormatters: [
         FilteringTextInputFormatter.allow(
-            RegExp('[0-9.,]+')
+            RegExp(r"[\d.]+")
         ),
         LengthLimitingTextInputFormatter(8),
       ],
@@ -852,43 +852,31 @@ class InputAmount extends StatelessWidget {
 
 
   Widget inputAmount() {
-    return Container(
-        width: 300,
-        margin: EdgeInsets.only(bottom: 50, top: 30),
-        child: TextFormField(
-          controller: amountController,
-          keyboardType: TextInputType.numberWithOptions(
-              decimal: true,
-              signed: false
-          ),
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(
-                RegExp(r"[\d.]+")
-            ),
-            LengthLimitingTextInputFormatter(8),
-          ],
-          decoration: InputDecoration(
-              hintText: 'Amount',
-              hintStyle: TextStyle(
-                  color: MyApp.Theme[MyApp.selectedTheme]!["hintText"]
-              ),
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: 20.0, horizontal: 10.0)
-          ),
-          style: TextStyle(
-              fontSize: 30,
-              color: MyApp.Theme[MyApp.selectedTheme]!["text"]
-          ),
-
+    return TextFormField(
+        controller: amountController,
+        keyboardType: TextInputType.numberWithOptions(
+            decimal: true,
+            signed: false
         ),
-        decoration: BoxDecoration(
-            border: Border.all(
-                color: _colorAnimation.value,
-                width: 4
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(
+              RegExp(r"[\d.]+")
+          ),
+          LengthLimitingTextInputFormatter(8),
+        ],
+        decoration: InputDecoration(
+            hintText: 'Amount (1 D.P)',
+            hintStyle: TextStyle(
+                color: MyApp.Theme[MyApp.selectedTheme]!["hintText"]
             ),
-            borderRadius: BorderRadius.circular(10)
-        )
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: 20.0, horizontal: 10.0)
+        ),
+        style: TextStyle(
+            fontSize: 30,
+            color: MyApp.Theme[MyApp.selectedTheme]!["text"]
+        ),
     );
   }
 
@@ -898,14 +886,24 @@ class InputAmount extends StatelessWidget {
         animation : controller,
         builder : (context, child) {
           return Container(
-            //margin: EdgeInsets.symmetric(horizontal : 24),
-            padding: EdgeInsets.only(
+            width: 300,
+            margin: EdgeInsets.only(
+                bottom: 50,
+                top: 30,
                 left: _offsetAnimation.value + 30.0,
                 right: 30.0 - _offsetAnimation.value
             ),
-            child: inputAmount(),
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: _colorAnimation.value,
+                    width: 4
+                ),
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: child
           );
-        }
+        },
+        child: inputAmount(),
     );
   }
 }

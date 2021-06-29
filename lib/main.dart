@@ -166,6 +166,35 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  Widget budgetButton(BuildContext context) {
+    return ElevatedButton(
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    elevation: 0,
+                    backgroundColor: Colors.white,
+                    child: LessBroke()
+                );
+              }
+          );
+        },
+        child: Text(
+            "Go LESS Broked",
+            style: TextStyle(
+                color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+            )
+        ),
+        style: ElevatedButton.styleFrom(
+            primary: MyApp.Theme[MyApp.selectedTheme]!["budgetButton"]
+        )
+    );
+  }
+
   Widget brokeButton() {
     return AnimatedButton(
       onPressed: () async {
@@ -230,7 +259,7 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
                 child : Row(
                   children: [
                     Spacer(),
-                    LessBroke()
+                    budgetButton(context)
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 )
@@ -675,63 +704,29 @@ class _LessBrokeState extends State<LessBroke> {
   final budgetController = TextEditingController();
   final targetController = TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
-  late double sliderValue;
-  late List<Widget> _pages;
+  double? sliderValue;
 
 
   @override
   Widget build(BuildContext context) {
-    return budgetButton(context);
-  }
-
-  Widget budgetButton(BuildContext context) {
-    _pages = [budget(context)];
-    budgetController.clear();
-    return ElevatedButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return Dialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    elevation: 0,
-                    backgroundColor: Colors.white,
-                    child: lessBrokeDialog(context)
-                );
-              }
-          );
-        },
-        child: Text(
-            "Go LESS Broked",
-            style: TextStyle(
-                color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
-            )
-        ),
-        style: ElevatedButton.styleFrom(
-            primary: MyApp.Theme[MyApp.selectedTheme]!["budgetButton"]
-        )
-    );
-  }
-
-  Widget lessBrokeDialog(context) {
     return Container(
         width: MediaQuery.of(context).size.height / 1.5,
         height : MediaQuery.of(context).size.width / 1.5,
         child : Stack(
-          children : [
-            PageView(
-              controller: pageController,
-              scrollDirection: Axis.horizontal,
-              children: _pages
-            )
-          ]
+            children : [
+              PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: pageController,
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    budget(context),
+                    savingTarget(context)
+                  ]
+              )
+            ]
         )
     );
   }
-
-
 
   Widget inputBudget() {
     return TextFormField(
@@ -795,7 +790,6 @@ class _LessBrokeState extends State<LessBroke> {
                   if (budgetController.text != '') {
                     setState(() {
                       sliderValue = double.parse(budgetController.text);
-                      _pages.add(savingTarget(context));
                     });
 
                     pageController.animateToPage(1,
@@ -825,65 +819,69 @@ class _LessBrokeState extends State<LessBroke> {
   }
 
   Widget savingTarget(context) {
-    return Container(
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        color: MyApp.Theme[MyApp.selectedTheme]!["dialogShadow"],
-                        offset: Offset(0,10),
-                        blurRadius: 10
-                    )
-                  ]
+    if (sliderValue != null && budgetController.text != '') {
+      return Container(
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                    color: MyApp.Theme[MyApp.selectedTheme]!["dialogShadow"],
+                    offset: Offset(0, 10),
+                    blurRadius: 10
+                )
+              ]
+          ),
+          child: Column(
+            children: [
+              Text(
+                  "How much would you like to be able to save for this month",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 13
+                  )
               ),
-              child : Column(
-                children: [
-                  Text(
-                      "How much would you like to be able to save for this month",
+              SizedBox(height: 20),
+              Text(sliderValue!.toStringAsFixed(1)),
+              Slider(
+                value: sliderValue!,
+                onChanged: (double value) {
+                  setState(() {
+                    sliderValue = value;
+                  });
+                },
+                min: 0,
+                max: double.parse(budgetController.text),
+              ),
+              SizedBox(height: 15),
+              AnimatedButton(
+                  onPressed: () async {
+                    if (targetController.text != '') {
+                      await spentDatabase.instance.addBudget(
+                          double.parse(
+                              targetController.text
+                          )
+                      );
+                    }
+                    player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+                    Navigator.pop(context);
+                  },
+                  child: Text("DONE",
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 13
+                          color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
                       )
                   ),
-                  SizedBox(height : 20),
-                  Text(sliderValue.toStringAsFixed(1)),
-                  Slider(
-                    value: sliderValue,
-                    onChanged: (double value) {
-                      setState(() {
-                        sliderValue = value;
-                      });
-                    },
-                    min: 0,
-                    max: double.parse(budgetController.text),
-                  ),
-                  SizedBox(height : 15),
-                  AnimatedButton(
-                      onPressed: () async {
-                        if (targetController.text != '') {
-                          await spentDatabase.instance.addBudget(
-                              double.parse(
-                                  targetController.text
-                              )
-                          );
-                        }
-                        player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
-                        Navigator.pop(context);
-                      },
-                      child: Text("DONE",
-                          style: TextStyle(
-                              color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
-                          )
-                      ),
-                      width: 100,
-                      height: 32
-                  )
-                ],
+                  width: 100,
+                  height: 32
               )
-    );
+            ],
+          )
+      );
+    } else {
+      return Container();
+    }
   }
 }
 

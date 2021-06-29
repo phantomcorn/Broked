@@ -141,7 +141,6 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
 
   DateTime _date = DateTime.now();
   late AnimationController _controller;
-  final budgetController = TextEditingController();
   final positiveRealOneDP = RegExp(r"^\d*(\.\d)?$");
 
   @override
@@ -218,253 +217,6 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget budgetButton() {
-    return ElevatedButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)
-                ),
-                elevation: 0,
-                backgroundColor: Colors.white,
-                child: budgetDialog(context)
-              );
-            }
-          );
-        },
-        child: Text(
-            "Go LESS Broked",
-            style: TextStyle(
-              color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
-            )
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: MyApp.Theme[MyApp.selectedTheme]!["budgetButton"]
-        )
-    );
-  }
-
-  Widget budgetDialog(context) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: MyApp.Theme[MyApp.selectedTheme]!["dialogShadow"],
-                offset: Offset(0,10),
-                blurRadius: 10
-              )
-            ]
-          ),
-          width: MediaQuery.of(context).size.height / 1.5,
-          height : MediaQuery.of(context).size.width / 2,
-          child : Column(
-            children: [
-              Text(
-                "Enter budget for this month",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15
-                )
-              ),
-              SizedBox(height : 20),
-              inputBudget(),
-              SizedBox(height : 15),
-              AnimatedButton(
-                onPressed: () async {
-                  if (budgetController.text != '') {
-                    await spentDatabase.instance.addBudget(
-                      double.parse(
-                        budgetController.text
-                      )
-                    );
-                  }
-
-                  player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
-                  Navigator.pop(context);
-                },
-                child: Text("DONE",
-                    style: TextStyle(
-                        color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
-                    )
-                ),
-                width: 100,
-                height: 32
-              )
-            ],
-          )
-        )
-      ]
-    );
-  }
-
-  Widget inputBudget() {
-    return TextFormField(
-      controller: budgetController,
-      keyboardType: TextInputType.numberWithOptions(
-          decimal: true,
-          signed: false
-      ),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(
-            RegExp(r"[\d.]+")
-        ),
-        LengthLimitingTextInputFormatter(8),
-      ],
-      decoration: InputDecoration(
-          hintText: 'Budget',
-          hintStyle: TextStyle(
-              color : Colors.black,
-              fontSize: 25
-          ),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0)
-      ),
-      style: TextStyle(
-          fontSize: 30,
-          color: Colors.black
-      ),
-    );
-  }
-
-  Widget summaryButton() {
-    return ElevatedButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return Dialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    elevation: 0,
-                    backgroundColor: Colors.white,
-                    child: endOfMonthSummary(context)
-                );
-              }
-          );
-        },
-      child: Text(
-          "Summary",
-          style: TextStyle(
-              color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
-          )
-      ),
-      style: ElevatedButton.styleFrom(
-          primary: MyApp.Theme[MyApp.selectedTheme]!["budgetButton"]
-      )
-    );
-  }
-
-
-  Widget endOfMonthSummary(context) {
-    return Stack(
-      children: [
-        Container(
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            shape :BoxShape.rectangle,
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: MyApp.Theme[MyApp.selectedTheme]!["dialogShadow"],
-                offset:  Offset(0, 10),
-                blurRadius: 10
-              )
-            ]
-          ),
-          width: MediaQuery.of(context).size.height / 1.5,
-          height: MediaQuery.of(context).size.width,
-          child : Column(
-            children: [
-              FutureBuilder(
-                future: spentDatabase.instance.getBudgetThisMonth(),
-                builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                  if (snapshot.hasData) {
-                    return Text("Budget this month: ${snapshot.data}",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color : Colors.black
-                        )
-                    );
-                  } else {
-                    return Text("Budget this month: ",
-                        style: TextStyle(
-                            fontSize: 14,
-                            color : Colors.black
-                        )
-                    );
-                  }
-                }
-              ),
-              SizedBox(height : 20),
-              FutureBuilder(
-                  future: spentDatabase.instance.getOverUnderSpent(),
-                  builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                    if (snapshot.hasData) {
-                      return RichText(
-                          text: TextSpan(
-                            text: "Leftover: ",
-                            style : TextStyle(
-                              fontSize: 14,
-                              color: Colors.black
-                            ),
-                            children: [
-                              TextSpan(
-                                text: snapshot.data.toString(),
-                                style: TextStyle(
-                                  color: (snapshot.data! > 0)
-                                      ? Color.fromRGBO(50, 205, 50, 1)
-                                      : (snapshot.data! < 0)
-                                      ? Color.fromRGBO(221, 0, 4, 1)
-                                      : Colors.black
-                                )
-                              )
-                            ]
-                          )
-                      );
-                    } else {
-                      return Text(
-                        "Leftover: ",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14
-                        )
-                      );
-                    }
-                  }
-              ),
-              AnimatedButton(
-                  onPressed: () async {
-                    player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                      "Understood",
-                      style: TextStyle(
-                          color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
-                      )
-                  ),
-                  width: 100,
-                  height: 32
-              )
-            ],
-          )
-        )
-      ],
-    );
-  }
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -478,7 +230,7 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
                 child : Row(
                   children: [
                     Spacer(),
-                    budgetButton()
+                    LessBroke()
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 )
@@ -538,7 +290,7 @@ class _Analytics extends State<Analytics> {
                             ),
                             elevation: 0,
                             backgroundColor: Colors.white,
-                            child: PopUpBox(context),
+                            child: resetDialog(context),
                           );
                         }
                       );
@@ -702,8 +454,6 @@ class _Analytics extends State<Analytics> {
                           }
                       ),
                       SizedBox(height: 20),
-
-
                       FutureBuilder(
                           future: spentDatabase.instance.getOverUnderSpent(),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -751,7 +501,7 @@ class _Analytics extends State<Analytics> {
     );
   }
 
-  Widget PopUpBox(context) {
+  Widget resetDialog(context) {
     return Stack(
       children: <Widget>[
         Container (
@@ -828,6 +578,7 @@ class _Analytics extends State<Analytics> {
   }
 
 }
+
 
 class InputAmount extends StatelessWidget {
 
@@ -906,6 +657,232 @@ class InputAmount extends StatelessWidget {
           );
         },
         child: inputAmount(),
+    );
+  }
+}
+
+class LessBroke extends StatefulWidget {
+
+  LessBroke({Key? key}) : super(key: key);
+
+  @override
+  _LessBrokeState createState() => _LessBrokeState();
+}
+
+
+class _LessBrokeState extends State<LessBroke> {
+
+  final budgetController = TextEditingController();
+  final targetController = TextEditingController();
+  final PageController pageController = PageController(initialPage: 0);
+  late double sliderValue;
+  late List<Widget> _pages;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return budgetButton(context);
+  }
+
+  Widget budgetButton(BuildContext context) {
+    _pages = [budget(context)];
+    budgetController.clear();
+    return ElevatedButton(
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    elevation: 0,
+                    backgroundColor: Colors.white,
+                    child: lessBrokeDialog(context)
+                );
+              }
+          );
+        },
+        child: Text(
+            "Go LESS Broked",
+            style: TextStyle(
+                color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+            )
+        ),
+        style: ElevatedButton.styleFrom(
+            primary: MyApp.Theme[MyApp.selectedTheme]!["budgetButton"]
+        )
+    );
+  }
+
+  Widget lessBrokeDialog(context) {
+    return Container(
+        width: MediaQuery.of(context).size.height / 1.5,
+        height : MediaQuery.of(context).size.width / 1.5,
+        child : Stack(
+          children : [
+            PageView(
+              controller: pageController,
+              scrollDirection: Axis.horizontal,
+              children: _pages
+            )
+          ]
+        )
+    );
+  }
+
+
+
+  Widget inputBudget() {
+    return TextFormField(
+      controller: budgetController,
+      keyboardType: TextInputType.numberWithOptions(
+          decimal: true,
+          signed: false
+      ),
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(
+            RegExp(r"[\d.]+")
+        ),
+        LengthLimitingTextInputFormatter(8),
+      ],
+      decoration: InputDecoration(
+          hintText: "Budget",
+          hintStyle: TextStyle(
+              color : Colors.black,
+              fontSize: 25
+          ),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0)
+      ),
+      style: TextStyle(
+          fontSize: 30,
+          color: Colors.black
+      ),
+    );
+  }
+
+
+  Widget budget(context) {
+    return Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                  color: MyApp.Theme[MyApp.selectedTheme]!["dialogShadow"],
+                  offset: Offset(0,10),
+                  blurRadius: 10
+              )
+            ]
+        ),
+        child : Column(
+          children: [
+            Text(
+                "Enter budget for this month",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15
+                )
+            ),
+            SizedBox(height : 20),
+            inputBudget(),
+            SizedBox(height : 15),
+            AnimatedButton(
+                onPressed: () async {
+                  if (budgetController.text != '') {
+                    setState(() {
+                      sliderValue = double.parse(budgetController.text);
+                      _pages.add(savingTarget(context));
+                    });
+
+                    pageController.animateToPage(1,
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.linear
+                    );
+                    await spentDatabase.instance.addBudget(
+                        double.parse(
+                            budgetController.text
+                        )
+                    );
+                  }
+
+                  player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+                },
+                child: Text("NEXT",
+                    style: TextStyle(
+                        color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+                    )
+                ),
+                width: 100,
+                height: 32
+            )
+          ],
+        )
+    );
+  }
+
+  Widget savingTarget(context) {
+    return Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        color: MyApp.Theme[MyApp.selectedTheme]!["dialogShadow"],
+                        offset: Offset(0,10),
+                        blurRadius: 10
+                    )
+                  ]
+              ),
+              child : Column(
+                children: [
+                  Text(
+                      "How much would you like to be able to save for this month",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 13
+                      )
+                  ),
+                  SizedBox(height : 20),
+                  Text(sliderValue.toStringAsFixed(1)),
+                  Slider(
+                    value: sliderValue,
+                    onChanged: (double value) {
+                      setState(() {
+                        sliderValue = value;
+                      });
+                    },
+                    min: 0,
+                    max: double.parse(budgetController.text),
+                  ),
+                  SizedBox(height : 15),
+                  AnimatedButton(
+                      onPressed: () async {
+                        if (targetController.text != '') {
+                          await spentDatabase.instance.addBudget(
+                              double.parse(
+                                  targetController.text
+                              )
+                          );
+                        }
+                        player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+                        Navigator.pop(context);
+                      },
+                      child: Text("DONE",
+                          style: TextStyle(
+                              color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+                          )
+                      ),
+                      width: 100,
+                      height: 32
+                  )
+                ],
+              )
     );
   }
 }

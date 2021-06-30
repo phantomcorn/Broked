@@ -889,19 +889,12 @@ class _LessBrokeState extends State<LessBroke> {
               SizedBox(height: 15),
               AnimatedButton(
                   onPressed: () async {
-                    if (targetController.text != '') {
-                      await spentDatabase.instance.addBudget(
-                          double.parse(
-                              targetController.text
-                          )
-                      );
-
-                      await spentDatabase.instance.addBudget(
-                          double.parse(
-                              budgetController.text
-                          )
-                      );
-                    }
+                    await spentDatabase.instance.addBudgetAndTarget(
+                        double.parse(
+                            budgetController.text
+                        ),
+                        double.parse(sliderValue!.toStringAsFixed(1))
+                    );
                     player.play(MyApp.theme[MyApp.selectedTheme]!["soundDef"]);
                     Navigator.pop(context);
                   },

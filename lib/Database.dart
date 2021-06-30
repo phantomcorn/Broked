@@ -100,6 +100,11 @@ class SpentDatabase {
   DateTime startOfMonth(DateTime date) {
     return DateTime(date.year, date.month, 1);
   }
+
+  int numOfDaysInMonth(DateTime date) {
+    //handles date.month + 1 > 12 case
+    return DateTime(date.year, date.month + 1, 0).day;
+  }
   
   Future<void> deleteAllRecords() async {
     final db = await instance.database;
@@ -293,6 +298,11 @@ class SpentDatabase {
 
   Future<double> getAvgSpending(int year) async {
     return (await getTotalSpendingYearly(year) / noOfMonths);
+  }
+
+  Future<double> getSpendingPerDayToHitTarget() async {
+    final availToSpend = await getBudgetThisMonth() - await getTargetThisMonth();
+    return availToSpend / numOfDaysInMonth(DateTime.now());
   }
 
 }

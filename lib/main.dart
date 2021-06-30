@@ -428,12 +428,12 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: SpentDatabase.instance.getSpendingThisYear(),
+                          future: SpentDatabase.instance.getAvgSpending(),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
                                   children : [
-                                    Text("annual spending: ",
+                                    Text("avg spending this month: ",
                                         style: TextStyle(
                                             fontSize: 14
                                         )
@@ -447,36 +447,7 @@ class _Analytics extends State<Analytics> {
                                   ]
                               );
                             } else {
-                              return Text("annual spending: ",
-                                  style: TextStyle(
-                                      fontSize: 14
-                                  )
-                              );
-                            }
-                          }
-                      ),
-                      SizedBox(height: 20),
-                      FutureBuilder(
-                          future: SpentDatabase.instance.getAvgSpending(DateTime.now().year),
-                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                            if (snapshot.hasData) {
-                              return Row(
-                                  children : [
-                                    Text("avg spending per month: ",
-                                        style: TextStyle(
-                                            fontSize: 14
-                                        )
-                                    ),
-                                    Spacer(),
-                                    Text("${snapshot.data!.toStringAsFixed(1)}",
-                                        style: TextStyle(
-                                            fontSize: 14
-                                        )
-                                    )
-                                  ]
-                              );
-                            } else {
-                              return Text("avg spending per month: ",
+                              return Text("avg spending this month: ",
                                   style: TextStyle(
                                       fontSize: 14
                                   )

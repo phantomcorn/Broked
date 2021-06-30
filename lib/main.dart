@@ -203,7 +203,7 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
         if (MyApp.positiveRealOneDP.hasMatch(InputAmount.amountController.text)
           && InputAmount.amountController.text != '') {
           player.play(MyApp.theme[MyApp.selectedTheme]!["soundSucc"]);
-          await spentDatabase.instance.accumulateAmount(
+          await SpentDatabase.instance.accumulateAmount(
               Spent(
                   date: _date,
                   amount: double.parse(InputAmount.amountController.text)
@@ -340,7 +340,7 @@ class _Analytics extends State<Analytics> {
                           margin: EdgeInsets.only(bottom : 40)
                       ),
                       FutureBuilder(
-                          future: spentDatabase.instance.getBudgetThisMonth(),
+                          future: SpentDatabase.instance.getBudgetThisMonth(),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -370,7 +370,7 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: spentDatabase.instance.getSpendingToday(),
+                          future: SpentDatabase.instance.getSpendingToday(),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -399,7 +399,7 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: spentDatabase.instance.getSpendingThisMonth(),
+                          future: SpentDatabase.instance.getSpendingThisMonth(),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -428,7 +428,7 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: spentDatabase.instance.getSpendingThisYear(),
+                          future: SpentDatabase.instance.getSpendingThisYear(),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -457,7 +457,7 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: spentDatabase.instance.getAvgSpending(DateTime.now().year),
+                          future: SpentDatabase.instance.getAvgSpending(DateTime.now().year),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -486,7 +486,7 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: spentDatabase.instance.getOverUnderSpent(),
+                          future: SpentDatabase.instance.getOverUnderSpent(),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -570,7 +570,7 @@ class _Analytics extends State<Analytics> {
                   AnimatedButton(
                       onPressed: () async {
                         player.play(MyApp.theme[MyApp.selectedTheme]!["soundDef"]);
-                        await spentDatabase.instance.deleteAllRecords();
+                        await SpentDatabase.instance.deleteAllRecords();
                         setState(() {
                         });
                         Navigator.pop(context);
@@ -889,7 +889,7 @@ class _LessBrokeState extends State<LessBroke> {
               SizedBox(height: 15),
               AnimatedButton(
                   onPressed: () async {
-                    await spentDatabase.instance.addBudgetAndTarget(
+                    await SpentDatabase.instance.addBudgetAndTarget(
                         double.parse(
                             budgetController.text
                         ),

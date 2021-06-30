@@ -60,13 +60,13 @@ class Spent {
 
 
 
-class spentDatabase {
+class SpentDatabase {
 
   //creds to : https://www.youtube.com/watch?v=UpKrhZ0Hppk
 
-  static final spentDatabase instance = spentDatabase._init();
+  static final SpentDatabase instance = SpentDatabase._init();
   static Database? _database;
-  spentDatabase._init();
+  SpentDatabase._init();
 
   static final double noOfMonths = 12.0;
 

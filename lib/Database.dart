@@ -256,7 +256,7 @@ class SpentDatabase {
 
   Future<double> getTargetByDate(DateTime date) async {
 
-    final res = await getSpentByDate(date);
+    final res = await getSpentByDate(startOfMonth(date));
 
     if (res == null) {
       return 0;

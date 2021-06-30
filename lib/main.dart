@@ -149,7 +149,7 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
   void initState() {
     _controller = AnimationController(
         vsync: this,
-        duration: Duration(milliseconds: 600)
+        duration: Duration(milliseconds: 500)
     );
 
 
@@ -477,6 +477,35 @@ class _Analytics extends State<Analytics> {
                               );
                             } else {
                               return Text("avg spending per month: ",
+                                  style: TextStyle(
+                                      fontSize: 14
+                                  )
+                              );
+                            }
+                          }
+                      ),
+                      SizedBox(height: 20),
+                      FutureBuilder(
+                          future: SpentDatabase.instance.getTargetThisMonth(),
+                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                  children : [
+                                    Text("saving target this month: ",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    ),
+                                    Spacer(),
+                                    Text("${snapshot.data!.toStringAsFixed(1)}",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    )
+                                  ]
+                              );
+                            } else {
+                              return Text("saving target this month: ",
                                   style: TextStyle(
                                       fontSize: 14
                                   )

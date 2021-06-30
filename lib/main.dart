@@ -515,6 +515,35 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
+                          future: SpentDatabase.instance.getSpendingPerDayToHitTarget(),
+                          builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                  children : [
+                                    Text("to hit saving target: ",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    ),
+                                    Spacer(),
+                                    Text("${snapshot.data!.toStringAsFixed(1)} / day",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        )
+                                    )
+                                  ]
+                              );
+                            } else {
+                              return Text("to hit saving target: ",
+                                  style: TextStyle(
+                                      fontSize: 14
+                                  )
+                              );
+                            }
+                          }
+                      ),
+                      SizedBox(height: 20),
+                      FutureBuilder(
                           future: SpentDatabase.instance.getOverUnderSpent(),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {

@@ -20,8 +20,10 @@ void main() {
 AudioCache player = AudioCache();
 
 class MyApp extends StatelessWidget {
-
-  static Map<String,Map<String,dynamic>> Theme = {
+  
+  static final positiveRealOneDP = RegExp(r"^\d*(\.\d)?$");
+  
+  static final Map<String,Map<String,dynamic>> theme = {
     "grey" : {
       "bg" : Colors.white,
       "text" : Color.fromRGBO(105, 105, 105, 1),
@@ -121,8 +123,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         currentIndex: _selectedDisplay,
         onTap: onTabTapped,
-        backgroundColor: MyApp.Theme[MyApp.selectedTheme]!["navBar"],
-        selectedItemColor: MyApp.Theme[MyApp.selectedTheme]!["navSelected"],
+        backgroundColor: MyApp.theme[MyApp.selectedTheme]!["navBar"],
+        selectedItemColor: MyApp.theme[MyApp.selectedTheme]!["navSelected"],
         unselectedItemColor: Color.fromRGBO(220, 220, 220, 1)
       ),
     );
@@ -141,7 +143,7 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
 
   DateTime _date = DateTime.now();
   late AnimationController _controller;
-  final positiveRealOneDP = RegExp(r"^\d*(\.\d)?$");
+  
 
   @override
   void initState() {
@@ -186,11 +188,11 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
         child: Text(
             "Go LESS Broked",
             style: TextStyle(
-                color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+                color: MyApp.theme[MyApp.selectedTheme]!["buttonText"]
             )
         ),
         style: ElevatedButton.styleFrom(
-            primary: MyApp.Theme[MyApp.selectedTheme]!["budgetButton"]
+            primary: MyApp.theme[MyApp.selectedTheme]!["budgetButton"]
         )
     );
   }
@@ -198,9 +200,9 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
   Widget brokeButton() {
     return AnimatedButton(
       onPressed: () async {
-        if (positiveRealOneDP.hasMatch(InputAmount.amountController.text)
+        if (MyApp.positiveRealOneDP.hasMatch(InputAmount.amountController.text)
           && InputAmount.amountController.text != '') {
-          player.play(MyApp.Theme[MyApp.selectedTheme]!["soundSucc"]);
+          player.play(MyApp.theme[MyApp.selectedTheme]!["soundSucc"]);
           await spentDatabase.instance.accumulateAmount(
               Spent(
                   date: _date,
@@ -209,7 +211,7 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
           );
         } else {
           _controller.forward();
-          player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+          player.play(MyApp.theme[MyApp.selectedTheme]!["soundDef"]);
         }
         InputAmount.amountController.clear();
       },
@@ -217,10 +219,10 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
         "BROKE!",
         style: TextStyle(
             fontSize: 30,
-            color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+            color: MyApp.theme[MyApp.selectedTheme]!["buttonText"]
         ),
       ),
-      color: MyApp.Theme[MyApp.selectedTheme]!["brokeButton"],
+      color: MyApp.theme[MyApp.selectedTheme]!["brokeButton"],
       width: 350,
       height: 100,
     );
@@ -360,7 +362,7 @@ class _Analytics extends State<Analytics> {
                               return Text("budget: ",
                                   style: TextStyle(
                                       fontSize: 14,
-                                      color : MyApp.Theme[MyApp.selectedTheme]!["text"]
+                                      color : MyApp.theme[MyApp.selectedTheme]!["text"]
                                   )
                               );
                             }
@@ -501,7 +503,7 @@ class _Analytics extends State<Analytics> {
                                         Color.fromRGBO(50, 205, 50, 1)
                                           : (snapshot.data! < 0) ?
                                         Color.fromRGBO(221, 0, 4, 1)
-                                          : MyApp.Theme[MyApp.selectedTheme]!["text"]
+                                          : MyApp.theme[MyApp.selectedTheme]!["text"]
                                     )
                                   )
                                 ],
@@ -510,7 +512,7 @@ class _Analytics extends State<Analytics> {
                               return Text(
                                   "leftover: ",
                                   style: TextStyle(
-                                      color: MyApp.Theme[MyApp.selectedTheme]!["text"],
+                                      color: MyApp.theme[MyApp.selectedTheme]!["text"],
                                       fontSize: 14
                                   )
                               );
@@ -541,7 +543,7 @@ class _Analytics extends State<Analytics> {
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                    color: MyApp.Theme[MyApp.selectedTheme]!["dialogShadow"],
+                    color: MyApp.theme[MyApp.selectedTheme]!["dialogShadow"],
                     offset: Offset(0,10),
                     blurRadius: 10
                 ),
@@ -567,7 +569,7 @@ class _Analytics extends State<Analytics> {
                 children: [
                   AnimatedButton(
                       onPressed: () async {
-                        player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+                        player.play(MyApp.theme[MyApp.selectedTheme]!["soundDef"]);
                         await spentDatabase.instance.deleteAllRecords();
                         setState(() {
                         });
@@ -575,24 +577,24 @@ class _Analytics extends State<Analytics> {
                       },
                       child : Text("YES",
                         style: TextStyle(
-                          color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+                          color: MyApp.theme[MyApp.selectedTheme]!["buttonText"]
                         )
                       ),
-                      color: MyApp.Theme[MyApp.selectedTheme]!["deleteYes"]!,
+                      color: MyApp.theme[MyApp.selectedTheme]!["deleteYes"]!,
                       width: 100,
                       height: 32
                   ),
                   AnimatedButton(
                       onPressed: () {
-                        player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+                        player.play(MyApp.theme[MyApp.selectedTheme]!["soundDef"]);
                         Navigator.pop(context);
                       },
                       child: Text("NO",
                         style: TextStyle(
-                          color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+                          color: MyApp.theme[MyApp.selectedTheme]!["buttonText"]
                         )
                       ),
-                      color: MyApp.Theme[MyApp.selectedTheme]!["deleteNo"]!,
+                      color: MyApp.theme[MyApp.selectedTheme]!["deleteNo"]!,
                       width: 100,
                       height: 32
                   )
@@ -628,7 +630,7 @@ class InputAmount extends StatelessWidget {
 
 
     _colorAnimation = ColorTween(
-      begin : MyApp.Theme[MyApp.selectedTheme]!["inputBorder"],
+      begin : MyApp.theme[MyApp.selectedTheme]!["inputBorder"],
       end: Colors.redAccent
     ).animate(controller);
 
@@ -649,7 +651,7 @@ class InputAmount extends StatelessWidget {
         decoration: InputDecoration(
             hintText: 'Amount (1 D.P)',
             hintStyle: TextStyle(
-                color: MyApp.Theme[MyApp.selectedTheme]!["hintText"]
+                color: MyApp.theme[MyApp.selectedTheme]!["hintText"]
             ),
             border: InputBorder.none,
             contentPadding: EdgeInsets.symmetric(
@@ -657,7 +659,7 @@ class InputAmount extends StatelessWidget {
         ),
         style: TextStyle(
             fontSize: 30,
-            color: MyApp.Theme[MyApp.selectedTheme]!["text"]
+            color: MyApp.theme[MyApp.selectedTheme]!["text"]
         ),
     );
   }
@@ -767,7 +769,7 @@ class _LessBrokeState extends State<LessBroke> {
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                  color: MyApp.Theme[MyApp.selectedTheme]!["dialogShadow"],
+                  color: MyApp.theme[MyApp.selectedTheme]!["dialogShadow"],
                   offset: Offset(0,10),
                   blurRadius: 10
               )
@@ -779,12 +781,12 @@ class _LessBrokeState extends State<LessBroke> {
                 "Enter budget for this month",
                 style: TextStyle(
                     color: Colors.black,
-                    fontSize: 15
+                    fontSize: 20
                 )
             ),
-            SizedBox(height : 20),
+            SizedBox(height : 40),
             inputBudget(),
-            SizedBox(height : 15),
+            SizedBox(height : 50),
             AnimatedButton(
                 onPressed: () async {
                   if (budgetController.text != '') {
@@ -794,20 +796,16 @@ class _LessBrokeState extends State<LessBroke> {
 
                     pageController.animateToPage(1,
                         duration: Duration(milliseconds: 200),
-                        curve: Curves.linear
+                        curve: Curves.easeInExpo
                     );
-                    await spentDatabase.instance.addBudget(
-                        double.parse(
-                            budgetController.text
-                        )
-                    );
+
                   }
 
-                  player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+                  player.play(MyApp.theme[MyApp.selectedTheme]!["soundDef"]);
                 },
                 child: Text("NEXT",
                     style: TextStyle(
-                        color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+                        color: MyApp.theme[MyApp.selectedTheme]!["buttonText"]
                     )
                 ),
                 width: 100,
@@ -821,14 +819,14 @@ class _LessBrokeState extends State<LessBroke> {
   Widget savingTarget(context) {
     if (sliderValue != null && budgetController.text != '') {
       return Container(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.zero,
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                    color: MyApp.Theme[MyApp.selectedTheme]!["dialogShadow"],
+                    color: MyApp.theme[MyApp.selectedTheme]!["dialogShadow"],
                     offset: Offset(0, 10),
                     blurRadius: 10
                 )
@@ -836,24 +834,57 @@ class _LessBrokeState extends State<LessBroke> {
           ),
           child: Column(
             children: [
-              Text(
-                  "How much would you like to be able to save for this month",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 13
-                  )
+              Container(
+                margin: EdgeInsets.only(bottom : 10),
+                child : Row(
+                  children: [
+                    IconButton(
+                      icon : Icon(Icons.arrow_back),
+                      onPressed: () {
+                        pageController.animateToPage(0,
+                            duration: Duration(milliseconds: 200),
+                            curve: Curves.easeInExpo
+                        );
+                      },
+                    ),
+                    Spacer(),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(left : 10, right : 10),
+                child : Text(
+                    "Savings target for this month",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20
+                    ),
+                )
               ),
               SizedBox(height: 20),
-              Text(sliderValue!.toStringAsFixed(1)),
-              Slider(
-                value: sliderValue!,
-                onChanged: (double value) {
-                  setState(() {
-                    sliderValue = value;
-                  });
-                },
-                min: 0,
-                max: double.parse(budgetController.text),
+              Container(
+                  margin: EdgeInsets.only(left : 10, right : 10),
+                  child : Text(
+                      sliderValue!.toStringAsFixed(1),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 23
+                      ),
+                  ),
+              ),
+              Container (
+                margin: EdgeInsets.only(left : 10, right : 10),
+                child: Slider(
+                  value: sliderValue!,
+                  onChanged: (double value) {
+                    setState(() {
+                      sliderValue = value;
+                    });
+                  },
+                  min: 0,
+                  max: double.parse(budgetController.text),
+                )
               ),
               SizedBox(height: 15),
               AnimatedButton(
@@ -864,13 +895,19 @@ class _LessBrokeState extends State<LessBroke> {
                               targetController.text
                           )
                       );
+
+                      await spentDatabase.instance.addBudget(
+                          double.parse(
+                              budgetController.text
+                          )
+                      );
                     }
-                    player.play(MyApp.Theme[MyApp.selectedTheme]!["soundDef"]);
+                    player.play(MyApp.theme[MyApp.selectedTheme]!["soundDef"]);
                     Navigator.pop(context);
                   },
                   child: Text("DONE",
                       style: TextStyle(
-                          color: MyApp.Theme[MyApp.selectedTheme]!["buttonText"]
+                          color: MyApp.theme[MyApp.selectedTheme]!["buttonText"]
                       )
                   ),
                   width: 100,

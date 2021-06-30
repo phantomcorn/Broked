@@ -296,8 +296,8 @@ class SpentDatabase {
     return await getTotalSpendingYearly(DateTime.now().year);
   }
 
-  Future<double> getAvgSpending(int year) async {
-    return (await getTotalSpendingYearly(year) / noOfMonths);
+  Future<double> getAvgSpending() async {
+    return await getTotalSpendingMonthly(DateTime.now().month) / numOfDaysInMonth(DateTime.now());
   }
 
   Future<double> getSpendingPerDayToHitTarget() async {

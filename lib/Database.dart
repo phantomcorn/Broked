@@ -7,11 +7,13 @@ class Spent {
   final DateTime date;
   final double amount;
   final double? budget;
+  final double? target;
 
   Spent({
     required this.date,
     required this.amount,
-    this.budget
+    this.budget,
+    this.target
   });
 
   static String dateToSQLFormat(DateTime date) {
@@ -23,7 +25,8 @@ class Spent {
     return {
       'date': dateToSQLFormat(date),
       'amountSpent': amount,
-      'budget' : budget?? null
+      'budget' : budget?? null,
+      'savingTarget' : target?? null
     };
   }
 
@@ -31,7 +34,8 @@ class Spent {
     return Spent(
         date : DateTime.parse(map['date'] as String),
         amount : map['amountSpent'] as double,
-        budget : map['budget'] as double? ?? null
+        budget : map['budget'] as double? ?? null,
+        target: map['savingTarget'] as double? ?? null
     );
   }
 
@@ -47,7 +51,10 @@ class Spent {
 
   @override
   String toString() {
-    return "spent{date: $date, amountSpent: $amount, budget: ${budget?? null}";
+    return "spent{date: $date,"
+        "amountSpent: $amount, "
+        "budget: ${budget?? null},"
+        "target: ${target?? null}";
   }
 }
 
@@ -75,6 +82,7 @@ class spentDatabase {
   Future<Database> _initDB(String filename) async {
     final dbPath = await getDatabasesPath();
     var path = join(dbPath, filename);
+    print(path);
 
     return await openDatabase(path, version : 1, onCreate: _createDB);
   }
@@ -83,7 +91,8 @@ class spentDatabase {
     await db.execute('CREATE TABLE spent('
         'date DATE PRIMARY KEY NOT NULL,'
         'amountSpent REAL NOT NULL,'
-        'budget REAL'
+        'budget REAL,'
+        'savingTarget REAL'
         ')'
     );
   }
@@ -102,31 +111,52 @@ class spentDatabase {
     db.close();
   }
 
-  
-  Future<double> getSpendingByDate(DateTime date) async {
+  Future<Spent?> getSpentByDate(DateTime date) async {
     final db = await instance.database;
     final map = await db.query(
         'spent',
-        columns: ['date','amountSpent'],
+        columns: ['date','amountSpent','budget', 'savingTarget'],
         where: 'date = ?',
         whereArgs: [Spent.dateToSQLFormat(date)]);
-    
 
     if (map.isEmpty) {
-      return 0;
+      return null;
     }
-    return map.first['amountSpent'] as double;
+    return Spent.fromMap(map.first);
   }
 
-  Future<int> accumulateAmount(Spent oldSpent) async {
+
+  Future<double> getSpendingByDate(DateTime date) async {
+    final res = await getSpentByDate(date);
+
+    if (res == null) {
+      return 0;
+    }
+    return res.amount;
+  }
+
+  Future<int> accumulateAmount(Spent spent) async {
+    //budget and target are never accumulated so it always take in the new value from argument spent
+
     final db = await instance.database;
-    var prevAmt = await getSpendingByDate(oldSpent.date);
-    var newAmt = prevAmt + oldSpent.amount;
-    Spent newSpent = Spent(
-        date : oldSpent.date,
-        amount : newAmt,
-        budget: oldSpent.budget ?? null
-    );
+    Spent? prevSpent = await getSpentByDate(spent.date);
+    Spent newSpent;
+    if (prevSpent == null) {
+      newSpent = Spent(
+          date : spent.date,
+          amount : spent.amount,
+          budget: spent.budget,
+          target: spent.target
+      );
+    } else {
+      newSpent = Spent(
+          date : spent.date,
+          amount : prevSpent.amount + spent.amount,
+          budget: spent.budget ?? prevSpent.budget,
+          target: spent.target ?? prevSpent.target
+      );
+    }
+
     return db.insert(
         'spent',
         newSpent.toMap(),
@@ -189,40 +219,53 @@ class spentDatabase {
         .reduce((value, element) => value + element);
   }
 
-  Future addBudget(double budget) async {
+  Future addBudgetAndTarget(double budget, double target) async {
     final db = await instance.database;
     DateTime now = DateTime.now();
-    if (await getSpendingByDate(startOfMonth(now)) == 0) {
+    //no query
+    if (await getSpentByDate(startOfMonth(now)) == null) {
       Spent spent = Spent(
           date: startOfMonth(now),
           amount: 0,
-          budget: budget
+          budget: budget,
+          target: target
       );
       await accumulateAmount(spent);
     } else {
       await db.rawUpdate(
           """UPDATE spent
-             SET budget = ?
-             WHERE date = ? """,
-          [Spent.dateToSQLFormat(DateTime(now.year, now.month, 1))]
+             SET budget = ?,
+                 savingTarget = ?
+             WHERE date = ? 
+          """,
+          [budget, target, Spent.dateToSQLFormat(startOfMonth(now))]
       );
     }
   }
 
+
   Future<double> getBudgetByDate(DateTime date) async {
-    final db = await instance.database;
-    final map = await db.query(
-        'spent',
-        columns: ['date','amountSpent','budget'],
-        where: 'date = ?',
-        whereArgs: [Spent.dateToSQLFormat(startOfMonth(date))]);
 
+    final res = await getSpentByDate(startOfMonth(date));
 
-    if (map.isEmpty) {
+    if (res == null) {
       return 0;
     }
-    return map.first['budget'] as double;
+    return res.budget ?? 0;
   }
+
+  Future<double> getTargetByDate(DateTime date) async {
+
+    final res = await getSpentByDate(date);
+
+    if (res == null) {
+      return 0;
+    }
+
+    return res.target ?? 0;
+  }
+
+
 
   Future<double> getOverUnderSpent() async {
     return await getBudgetThisMonth() - await getSpendingThisMonth();
@@ -230,6 +273,10 @@ class spentDatabase {
 
   Future<double> getBudgetThisMonth() async {
     return await getBudgetByDate(DateTime.now());
+  }
+
+  Future<double> getTargetThisMonth() async {
+    return await getTargetByDate(DateTime.now());
   }
 
   Future<double> getSpendingToday() async {

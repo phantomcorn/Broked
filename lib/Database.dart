@@ -169,22 +169,22 @@ class SpentDatabase {
     );
   }
 
-  Future<List<Spent>> getAll() async {
+  Future<List<Spent>> getAllSpendingInAMonth(int month) async {
     final db = await instance.database;
-    final results = await db.query('spent');
+    String monthStr;
+    if (month < 10) {
+      monthStr = '0' + month.toString();
+    } else {
+      monthStr = month.toString();
+    }
+
+    final results = await db.rawQuery(
+        "SELECT * FROM spent WHERE strftime('%m', date) = '$monthStr'"
+    );
 
     return results.map((map) => Spent.fromMap(map)).toList();
   }
 
-  Future<double> getTotalSpending() async {
-    List<Spent> results = await getAll();
-    if (results.isEmpty) {
-      return 0;
-    }
-
-    return results.map((spent) => spent.amount)
-        .reduce((value, element) => value + element);
-  }
 
   Future<double> getTotalSpendingYearly(int year) async {
     final db = await instance.database;
@@ -204,22 +204,13 @@ class SpentDatabase {
 
   Future<double> getTotalSpendingMonthly(int month) async {
     final db = await instance.database;
-    String monthStr;
-    if (month < 10) {
-      monthStr = '0' + month.toString();
-    } else {
-      monthStr = month.toString();
-    }
-
-    final results = await db.rawQuery(
-      "SELECT * FROM spent WHERE strftime('%m', date) = '$monthStr'"
-    );
+    final results = await getAllSpendingInAMonth(month);
 
     if (results.isEmpty) {
       return 0;
     }
 
-    return results.map((map) => Spent.fromMap(map).amount)
+    return results.map((spent) => spent.amount)
         .toList()
         .reduce((value, element) => value + element);
   }

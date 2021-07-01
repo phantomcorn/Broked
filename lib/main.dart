@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:broked/Database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -564,12 +565,16 @@ class _Analytics extends State<Analytics> {
                       if (snapshot.hasData) {
 
                         List<Spent> spents = snapshot.data![0];
-                        double spendPerDay = snapshot.data![1];
+                        double maxSpent = spents.map((spent) => spent.amount).reduce(max);
+                        double minSpent = spents.map((spent) => spent.amount).reduce(min);
+                        double spendPerDay = double.parse(snapshot.data![1].toStringAsFixed(1));
+                        int numDaysInMonth = SpentDatabase.instance
+                            .numOfDaysInMonth(DateTime.now());
 
                         List<HorizontalLine> spendingPerDay = [
-                          HorizontalLine(y: spendPerDay);
+                          HorizontalLine(y: spendPerDay)
                         ];
-
+                        print("$spendPerDay");
                         List<FlSpot> coordinates = [];
                         for (Spent spent in spents) {
                           //print("(${spent.date.day} , ${spent.amount})");
@@ -593,13 +598,14 @@ class _Analytics extends State<Analytics> {
                             height: 300,
                             child: LineChart(
                                 LineChartData(
-                                    minY: 0,
-                                    maxY: 100,
+                                    minY: (minSpent.floorToDouble() > spendPerDay)
+                                        ? 0
+                                        : minSpent.floorToDouble(),
+                                    maxY: (maxSpent.ceilToDouble() > spendPerDay)
+                                        ? maxSpent.ceilToDouble() + 1
+                                        : spendPerDay.ceilToDouble() * 10,
                                     minX: 1,
-                                    maxX: SpentDatabase.instance
-                                        .numOfDaysInMonth(DateTime.now())
-                                        .toDouble(),
-
+                                    maxX: numDaysInMonth.toDouble(),
                                     lineBarsData: [
                                       LineChartBarData(
                                           spots: coordinates
@@ -607,6 +613,60 @@ class _Analytics extends State<Analytics> {
                                     ],
                                     extraLinesData: ExtraLinesData(
                                         horizontalLines: spendingPerDay
+                                    ),
+                                    titlesData: FlTitlesData(
+                                      show: true,
+                                      bottomTitles: SideTitles(
+                                        showTitles: true,
+                                        reservedSize: 22,
+                                        getTextStyles: (value) =>
+                                        const TextStyle(color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 16),
+                                        getTitles: (value) {
+                                          if (value == numDaysInMonth) {
+                                            return '$numDaysInMonth';
+                                          } else if (value == 1) {
+                                            return '1';
+                                          } else if (value == 5) {
+                                            return '5';
+                                          } else if (value == 10) {
+                                            return '10';
+                                          } else if (value == 15) {
+                                            return '15';
+                                          } else if (value == 20) {
+                                            return '20';
+                                          } else if (value == 25) {
+                                            return '25';
+                                          }
+                                          return '';
+                                        },
+                                        margin: 8,
+                                      ),
+                                      leftTitles: SideTitles(
+                                        showTitles: true,
+                                        getTextStyles: (value) => const TextStyle(
+                                          color: Color(0xff67727d),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        reservedSize: 28,
+                                        margin: 12,
+                                      ),
+                                    ),
+                                    borderData: FlBorderData(
+                                      border : const Border(
+                                        bottom: BorderSide(
+                                          color: Color(0xff4e4965),
+                                          width: 4,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.transparent,
+                                        ),
+                                        right: BorderSide(
+                                          color: Colors.transparent,
+                                        ),
+                                        top: BorderSide(
+                                          color: Colors.transparent,
+                                        ),
+                                      ),
                                     )
                                 )
                             )

@@ -169,7 +169,7 @@ class SpentDatabase {
     );
   }
 
-  Future<List<Spent>> getAllSpendingInAMonth(int month) async {
+  Future<List<Spent>> getAllSpentInAMonth(int month) async {
     final db = await instance.database;
     String monthStr;
     if (month < 10) {
@@ -204,7 +204,7 @@ class SpentDatabase {
 
   Future<double> getTotalSpendingMonthly(int month) async {
     final db = await instance.database;
-    final results = await getAllSpendingInAMonth(month);
+    final results = await getAllSpentInAMonth(month);
 
     if (results.isEmpty) {
       return 0;
@@ -281,6 +281,10 @@ class SpentDatabase {
 
   Future<double> getSpendingThisMonth () async {
     return await getTotalSpendingMonthly(DateTime.now().month);
+  }
+
+  Future<List<Spent>> getAllSpentThisMonth () async {
+    return await getAllSpentInAMonth(DateTime.now().month);
   }
 
   Future<double> getSpendingThisYear () async {

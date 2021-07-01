@@ -563,14 +563,16 @@ class _Analytics extends State<Analytics> {
                     builder : (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
                       if (snapshot.hasData) {
 
+                        List<Spent> spents = snapshot.data![0];
+                        double spendPerDay = snapshot.data![1];
+
                         List<HorizontalLine> spendingPerDay = [
-                          HorizontalLine(y: snapshot.data![1])
+                          HorizontalLine(y: spendPerDay);
                         ];
-                        print("${snapshot.data![1]}");
 
                         List<FlSpot> coordinates = [];
-                        for (Spent spent in snapshot.data![0]) {
-                          print("(${spent.date.day} , ${spent.amount})");
+                        for (Spent spent in spents) {
+                          //print("(${spent.date.day} , ${spent.amount})");
                           coordinates.add(
                               FlSpot(
                                   spent.date.day.toDouble(),

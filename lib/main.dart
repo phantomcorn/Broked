@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:animated_button/animated_button.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:fl_chart/fl_chart.dart';
 import "Database.dart";
 import "Theme.dart";
 
@@ -548,10 +549,70 @@ class _Analytics extends State<Analytics> {
                             }
                           }
                       ),
+                      SizedBox(height : 40),
                     ],
                     crossAxisAlignment: CrossAxisAlignment.start,
                   ),
                   margin: EdgeInsets.only(left : 90, right : 90)
+                ),
+                FutureBuilder(
+                    future : Future.wait([
+                      SpentDatabase.instance.getAllSpentThisMonth(),
+                      SpentDatabase.instance.getSpendingPerDayToHitTarget()
+                    ]),
+                    builder : (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+                      if (snapshot.hasData) {
+
+                        List<HorizontalLine> spendingPerDay = [
+                          HorizontalLine(y: snapshot.data![1])
+                        ];
+                        print("${snapshot.data![1]}");
+
+                        List<FlSpot> coordinates = [];
+                        for (Spent spent in snapshot.data![0]) {
+                          print("(${spent.date.day} , ${spent.amount})");
+                          coordinates.add(
+                              FlSpot(
+                                  spent.date.day.toDouble(),
+                                  spent.amount
+                              )
+                          );
+                        }
+
+                        return Container(
+                            margin: EdgeInsets.only(left : 30, right : 30),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color : Colors.blueAccent
+                                )
+                            ),
+
+                            width: MediaQuery.of(context).size.width,
+                            height: 300,
+                            child: LineChart(
+                                LineChartData(
+                                    minY: 0,
+                                    maxY: 100,
+                                    minX: 1,
+                                    maxX: SpentDatabase.instance
+                                        .numOfDaysInMonth(DateTime.now())
+                                        .toDouble(),
+
+                                    lineBarsData: [
+                                      LineChartBarData(
+                                          spots: coordinates
+                                      )
+                                    ],
+                                    extraLinesData: ExtraLinesData(
+                                        horizontalLines: spendingPerDay
+                                    )
+                                )
+                            )
+                        );
+                      } else {
+                        return Text("Error");
+                      }
+                    }
                 )
               ],
             ),

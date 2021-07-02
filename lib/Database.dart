@@ -82,7 +82,6 @@ class SpentDatabase {
   Future<Database> _initDB(String filename) async {
     final dbPath = await getDatabasesPath();
     var path = join(dbPath, filename);
-    print(path);
 
     return await openDatabase(path, version : 1, onCreate: _createDB);
   }

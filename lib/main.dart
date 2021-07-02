@@ -576,7 +576,7 @@ class _Analytics extends State<Analytics> {
                               height: 300,
                               child: Align(
                                 alignment: Alignment.center,
-                                child : Text("Add in budget and a saving target first to see this graph",
+                                child : Text("Add in budget and a saving target first to see graph",
                                   style: TextStyle(
                                       color: Colors.white
                                   ),
@@ -585,13 +585,13 @@ class _Analytics extends State<Analytics> {
                           );
                         } else {
                           return Container(
+                              padding: EdgeInsets.all(20),
                               margin: EdgeInsets.only(left: 30, right: 30),
                               decoration: BoxDecoration(
                                   border: Border.all(
                                       color: Colors.blueAccent
                                   )
                               ),
-
                               width: MediaQuery
                                   .of(context)
                                   .size
@@ -601,7 +601,7 @@ class _Analytics extends State<Analytics> {
                           );
                         }
                       } else {
-                        return Text("Error");
+                        return Text("Error fetching data from database");
                       }
                     }
                 )
@@ -634,6 +634,21 @@ class _Analytics extends State<Analytics> {
     }
     return LineChart(
         LineChartData(
+            gridData: FlGridData(
+              drawVerticalLine: true,
+              getDrawingHorizontalLine: (value) {
+                return FlLine(
+                  color: Colors.black,
+                  strokeWidth: 1,
+                );
+              },
+              getDrawingVerticalLine: (value) {
+                return FlLine(
+                  color: Colors.black,
+                  strokeWidth: 1,
+                );
+              },
+            ),
             minY: (minSpent.floorToDouble() > spendPerDay)
                 ? 0
                 : minSpent.floorToDouble(),
@@ -655,8 +670,10 @@ class _Analytics extends State<Analytics> {
               bottomTitles: SideTitles(
                 showTitles: true,
                 reservedSize: 22,
-                getTextStyles: (value) =>
-                const TextStyle(color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 16),
+                getTextStyles: (value) => TextStyle(
+                    color: MyApp.theme[MyApp.selectedTheme]!["text"],
+                    fontSize: 10
+                ),
                 getTitles: (value) {
                   if (value == numDaysInMonth) {
                     return '$numDaysInMonth';
@@ -679,28 +696,45 @@ class _Analytics extends State<Analytics> {
               ),
               leftTitles: SideTitles(
                 showTitles: true,
-                getTextStyles: (value) => const TextStyle(
-                  color: Color(0xff67727d),
-                  fontWeight: FontWeight.bold,
+                getTextStyles: (value) => TextStyle(
+                  color: MyApp.theme[MyApp.selectedTheme]!["text"],
+                  fontSize: 10
                 ),
                 reservedSize: 28,
-                margin: 12,
+                margin: 8,
               ),
+            ),
+            axisTitleData: FlAxisTitleData(
+              leftTitle: AxisTitle(
+                showTitle: true,
+                titleText: "Spent",
+                textStyle: TextStyle(
+                  color : MyApp.theme[MyApp.selectedTheme]!["text"],
+                  fontWeight: FontWeight.bold
+                )
+              ),
+              bottomTitle: AxisTitle(
+                  showTitle: true,
+                  titleText: "Day",
+                  textStyle: TextStyle(
+                      color : MyApp.theme[MyApp.selectedTheme]!["text"],
+                      fontWeight: FontWeight.bold
+                  )
+              )
             ),
             borderData: FlBorderData(
               border : const Border(
                 bottom: BorderSide(
-                  color: Color(0xff4e4965),
-                  width: 4,
+                  color: Colors.black,
                 ),
                 left: BorderSide(
-                  color: Colors.transparent,
+                  color: Colors.black,
                 ),
                 right: BorderSide(
-                  color: Colors.transparent,
+                  color: Colors.black,
                 ),
                 top: BorderSide(
-                  color: Colors.transparent,
+                  color: Colors.black,
                 ),
               ),
             )

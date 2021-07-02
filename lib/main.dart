@@ -584,13 +584,15 @@ class _Analytics extends State<Analytics> {
                               )
                           );
                         } else {
+                          
                           return Container(
                               padding: EdgeInsets.all(20),
                               margin: EdgeInsets.only(left: 30, right: 30),
                               decoration: BoxDecoration(
                                   border: Border.all(
                                       color: Colors.blueAccent
-                                  )
+                                  ),
+                                  borderRadius: BorderRadius.circular(18)
                               ),
                               width: MediaQuery
                                   .of(context)
@@ -614,6 +616,7 @@ class _Analytics extends State<Analytics> {
   }
 
   Widget lineChart(List<Spent> spents, double spendPerDay) {
+    String monthYear = "${spents.first.date.month}/${spents.first.date.year}";
     double maxSpent = spents.map((spent) => spent.amount).reduce(max);
     double minSpent = spents.map((spent) => spent.amount).reduce(min);
     int numDaysInMonth = SpentDatabase.instance
@@ -659,9 +662,26 @@ class _Analytics extends State<Analytics> {
             maxX: numDaysInMonth.toDouble(),
             lineBarsData: [
               LineChartBarData(
-                  spots: coordinates
+                  spots: coordinates,
               )
             ],
+            lineTouchData: LineTouchData(
+              touchTooltipData: LineTouchTooltipData(
+                getTooltipItems: (touchedSpots) {
+                  return touchedSpots.map((LineBarSpot touchedSpot) {
+                    final textStyle = TextStyle(
+                      color: touchedSpot.bar.colors[0],
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    );
+                    return LineTooltipItem(
+                      "${touchedSpot.x.toInt()}/$monthYear : spent ${touchedSpot.y}",
+                      textStyle
+                    );
+                  }).toList();
+                }
+              )
+            ),
             extraLinesData: ExtraLinesData(
                 horizontalLines: spendingPerDay
             ),

@@ -665,7 +665,7 @@ class _Analytics extends State<Analytics> {
             lineBarsData: [
               LineChartBarData(
                   spots: coordinates,
-                  barWidth: 5
+                  barWidth: 2
               )
             ],
             lineTouchData: LineTouchData(
@@ -749,7 +749,9 @@ class _Analytics extends State<Analytics> {
                 ),
               ),
             )
-        )
+        ),
+        swapAnimationCurve: Curves.bounceIn,
+        swapAnimationDuration: Duration(milliseconds: 300),
     );
   }
 

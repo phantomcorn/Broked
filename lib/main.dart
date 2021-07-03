@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
       "dialogShadow" : Colors.black,
       "navBar" : Colors.white,
       "navSelected" : Color.fromRGBO(105, 105, 105, 1),
+      "grid" : Color.fromRGBO(211, 211, 211, 1),
       "soundDef" : "greyDefault.mp3",
       "soundSucc" : "greySucc.mp3"
     },
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
       "dialogShadow" : Color.fromRGBO(57, 255, 20, 1),
       "navBar" : Colors.black,
       "navSelected" : Color.fromRGBO(224, 231, 34, 1),
+      "grid" : Color.fromRGBO(224,231,34, 1),
       "soundDef" : "retroDefault.wav",
       "soundSucc" : "retroSucc.wav"
     }
@@ -584,7 +586,6 @@ class _Analytics extends State<Analytics> {
                               )
                           );
                         } else {
-                          
                           return Container(
                               padding: EdgeInsets.all(20),
                               margin: EdgeInsets.only(left: 30, right: 30),
@@ -641,13 +642,13 @@ class _Analytics extends State<Analytics> {
               drawVerticalLine: true,
               getDrawingHorizontalLine: (value) {
                 return FlLine(
-                  color: Colors.black,
+                  color: MyApp.theme[MyApp.selectedTheme]!["grid"],
                   strokeWidth: 1,
                 );
               },
               getDrawingVerticalLine: (value) {
                 return FlLine(
-                  color: Colors.black,
+                  color: MyApp.theme[MyApp.selectedTheme]!["grid"],
                   strokeWidth: 1,
                 );
               },

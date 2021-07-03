@@ -620,13 +620,14 @@ class _Analytics extends State<Analytics> {
     String monthYear = "${spents.first.date.month}/${spents.first.date.year}";
     double maxSpent = spents.map((spent) => spent.amount).reduce(max);
     double minSpent = spents.map((spent) => spent.amount).reduce(min);
-    int numDaysInMonth = SpentDatabase.instance
-        .numOfDaysInMonth(DateTime.now());
+    double maxDayInSpent = spents.map((spent) => spent.date.day).reduce(max).toDouble();
 
     List<HorizontalLine> spendingPerDay = [
       HorizontalLine(y: spendPerDay)
     ];
+
     List<FlSpot> coordinates = [];
+
     for (Spent spent in spents) {
       //print("(${spent.date.day} , ${spent.amount})");
       coordinates.add(
@@ -660,10 +661,12 @@ class _Analytics extends State<Analytics> {
                 ? maxSpent.ceilToDouble() + 1
                 : spendPerDay.ceilToDouble() * 10,
             minX: 1,
-            maxX: numDaysInMonth.toDouble(),
+            maxX: maxDayInSpent,
             lineBarsData: [
               LineChartBarData(
                   spots: coordinates,
+                  barWidth: 5,
+                  isStrokeCapRound: true,
               )
             ],
             lineTouchData: LineTouchData(
@@ -696,20 +699,8 @@ class _Analytics extends State<Analytics> {
                     fontSize: 10
                 ),
                 getTitles: (value) {
-                  if (value == numDaysInMonth) {
-                    return '$numDaysInMonth';
-                  } else if (value == 1) {
-                    return '1';
-                  } else if (value == 5) {
-                    return '5';
-                  } else if (value == 10) {
-                    return '10';
-                  } else if (value == 15) {
-                    return '15';
-                  } else if (value == 20) {
-                    return '20';
-                  } else if (value == 25) {
-                    return '25';
+                  if (value.toInt() % 2 == 1) {
+                    return value.toStringAsFixed(0);
                   }
                   return '';
                 },

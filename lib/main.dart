@@ -665,8 +665,7 @@ class _Analytics extends State<Analytics> {
             lineBarsData: [
               LineChartBarData(
                   spots: coordinates,
-                  barWidth: 5,
-                  isStrokeCapRound: true,
+                  barWidth: 5
               )
             ],
             lineTouchData: LineTouchData(
@@ -679,7 +678,7 @@ class _Analytics extends State<Analytics> {
                       fontSize: 14,
                     );
                     return LineTooltipItem(
-                      "${touchedSpot.x.toInt()}/$monthYear : spent ${touchedSpot.y}",
+                      "${touchedSpot.x.toInt()}/$monthYear : ${touchedSpot.y}",
                       textStyle
                     );
                   }).toList();

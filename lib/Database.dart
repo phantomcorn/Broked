@@ -178,7 +178,10 @@ class SpentDatabase {
     }
 
     final results = await db.rawQuery(
-        "SELECT * FROM spent WHERE strftime('%m', date) = '$monthStr'"
+        "SELECT * "
+        "FROM spent "
+        "WHERE strftime('%m', date) = '$monthStr'"
+        "ORDER BY date(date)"
     );
 
     return results.map((map) => Spent.fromMap(map)).toList();
@@ -189,7 +192,10 @@ class SpentDatabase {
     final db = await instance.database;
 
     final results = await db.rawQuery(
-        "SELECT * FROM spent WHERE strftime('%Y', date) = '$year'"
+        "SELECT * "
+        "FROM spent "
+        "WHERE strftime('%Y', date) = '$year'"
+        "ORDER BY date(date)"
     );
 
     if (results.isEmpty) {

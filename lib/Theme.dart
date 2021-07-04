@@ -19,8 +19,8 @@ class customTheme {
         style: TextButton.styleFrom(
           primary: MyApp.theme[MyApp.selectedTheme]!["dateButton"],
           textStyle: TextStyle(
-            fontSize: 30,
-            fontFamily: GoogleFonts.nunito().fontFamily
+            fontFamily: GoogleFonts.nunito().fontFamily,
+            color: MyApp.theme[MyApp.selectedTheme]!["text"]
           )
         )
       ),

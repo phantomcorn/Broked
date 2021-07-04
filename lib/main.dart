@@ -222,13 +222,13 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
       child: Text(
         "BROKE!",
         style: TextStyle(
-            fontSize: 30,
+            fontSize: MediaQuery.of(context).size.width / 15,
             color: MyApp.theme[MyApp.selectedTheme]!["buttonText"]
         ),
       ),
       color: MyApp.theme[MyApp.selectedTheme]!["brokeButton"],
-      width: 350,
-      height: 100,
+      width: MediaQuery.of(context).size.width / 1.2,
+      height: MediaQuery.of(context).size.height / 8.5,
     );
   }
 
@@ -248,20 +248,27 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
           }
         );
       },
-      child : Text("${DateFormat('dd MMM yyyy').format(_date)}")
+      child : Text(
+          "${DateFormat('dd MMM yyyy').format(_date)}",
+          style: TextStyle(
+            fontSize: MediaQuery.of(context).size.width / 15
+          ),
+      )
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
+    double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child : Scaffold(
-        body: Center(
+        body: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
           child : Column(
             children: <Widget> [
               Container(
-                margin: EdgeInsets.fromLTRB(20, 20, 20, 140),
+                height: height / 15,
+                margin: EdgeInsets.fromLTRB(20, 20, 20, height / 8),
                 child : Row(
                   children: [
                     Spacer(),
@@ -271,6 +278,8 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
                 )
               ),
               Container(
+                width: MediaQuery.of(context).size.width / 2.5,
+                height : height / 16,
                 child : datePicker()
               ),
               InputAmount(
@@ -305,6 +314,8 @@ class _Analytics extends State<Analytics> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         body: Center(
@@ -340,10 +351,10 @@ class _Analytics extends State<Analytics> {
                       Container(
                           child : Text("analytics",
                               style: TextStyle(
-                                  fontSize: 16
+                                  fontSize: width * 0.04
                               )
                           ),
-                          margin: EdgeInsets.only(bottom : 40)
+                          margin: EdgeInsets.only(bottom : height / 30)
                       ),
                       FutureBuilder(
                           future: SpentDatabase.instance.getBudgetByDate(_date),
@@ -353,13 +364,13 @@ class _Analytics extends State<Analytics> {
                                   children : [
                                     Text("budget: ",
                                         style: TextStyle(
-                                            fontSize: 14
+                                            fontSize: width * 0.035
                                         )
                                     ),
                                     Spacer(),
                                     Text("${snapshot.data!.toStringAsFixed(1)}",
                                         style: TextStyle(
-                                            fontSize: 14
+                                            fontSize: width * 0.035
                                         )
                                     )
                                   ]
@@ -367,14 +378,14 @@ class _Analytics extends State<Analytics> {
                             } else {
                               return Text("budget: ",
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: width * 0.035,
                                       color : MyApp.theme[MyApp.selectedTheme]!["text"]
                                   )
                               );
                             }
                           }
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: height / 40),
                       FutureBuilder(
                           future: SpentDatabase.instance.getSpendingByDate(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -383,13 +394,13 @@ class _Analytics extends State<Analytics> {
                                   children : [
                                     Text("spent today: ",
                                         style: TextStyle(
-                                            fontSize: 14
+                                            fontSize: width * 0.035
                                         )
                                     ),
                                     Spacer(),
                                     Text("${snapshot.data!.toStringAsFixed(1)}",
                                         style: TextStyle(
-                                            fontSize: 14
+                                            fontSize: width * 0.035
                                         )
                                     )
                                   ]
@@ -397,13 +408,13 @@ class _Analytics extends State<Analytics> {
                             } else {
                               return Text("spent today: ",
                                   style: TextStyle(
-                                      fontSize: 14
+                                      fontSize: width * 0.035
                                   )
                               );
                             }
                           }
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: height / 40),
                       FutureBuilder(
                           future: SpentDatabase.instance.getSpendingByDate(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -412,13 +423,13 @@ class _Analytics extends State<Analytics> {
                                   children : [
                                     Text("spent this month: ",
                                         style: TextStyle(
-                                            fontSize: 14
+                                            fontSize: width * 0.035
                                         )
                                     ),
                                     Spacer(),
                                     Text("${snapshot.data!.toStringAsFixed(1)}",
                                         style: TextStyle(
-                                            fontSize: 14
+                                            fontSize: width * 0.035
                                         )
                                     )
                                   ]
@@ -426,13 +437,13 @@ class _Analytics extends State<Analytics> {
                             } else {
                               return Text("spent this month: ",
                                   style: TextStyle(
-                                      fontSize: 14
+                                      fontSize: width * 0.035
                                   )
                               );
                             }
                           }
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: height / 40),
                       FutureBuilder(
                           future: SpentDatabase.instance.getAvgSpending(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -441,13 +452,13 @@ class _Analytics extends State<Analytics> {
                                   children : [
                                     Text("avg spending this month: ",
                                         style: TextStyle(
-                                            fontSize: 14
+                                            fontSize: width * 0.035
                                         )
                                     ),
                                     Spacer(),
                                     Text("${snapshot.data!.toStringAsFixed(1)}",
                                         style: TextStyle(
-                                            fontSize: 14
+                                            fontSize: width * 0.035
                                         )
                                     )
                                   ]
@@ -455,13 +466,13 @@ class _Analytics extends State<Analytics> {
                             } else {
                               return Text("avg spending this month: ",
                                   style: TextStyle(
-                                      fontSize: 14
+                                      fontSize: width * 0.035
                                   )
                               );
                             }
                           }
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: height / 40),
                       FutureBuilder(
                           future: SpentDatabase.instance.getTargetByDate(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -470,13 +481,13 @@ class _Analytics extends State<Analytics> {
                                   children : [
                                     Text("saving target this month: ",
                                         style: TextStyle(
-                                            fontSize: 14
+                                            fontSize: width * 0.035
                                         )
                                     ),
                                     Spacer(),
                                     Text("${snapshot.data!.toStringAsFixed(1)}",
                                         style: TextStyle(
-                                            fontSize: 14
+                                            fontSize: width * 0.035
                                         )
                                     )
                                   ]
@@ -484,13 +495,13 @@ class _Analytics extends State<Analytics> {
                             } else {
                               return Text("saving target this month: ",
                                   style: TextStyle(
-                                      fontSize: 14
+                                      fontSize: width * 0.035
                                   )
                               );
                             }
                           }
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: height / 40),
                       FutureBuilder(
                           future: SpentDatabase.instance.getSpendingPerDayToHitTarget(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -499,13 +510,13 @@ class _Analytics extends State<Analytics> {
                                   children : [
                                     Text("to hit saving target: ",
                                         style: TextStyle(
-                                            fontSize: 14
+                                            fontSize: width * 0.035
                                         )
                                     ),
                                     Spacer(),
                                     Text("${snapshot.data!.toStringAsFixed(1)} / day",
                                         style: TextStyle(
-                                            fontSize: 14
+                                            fontSize: width * 0.035
                                         )
                                     )
                                   ]
@@ -513,13 +524,13 @@ class _Analytics extends State<Analytics> {
                             } else {
                               return Text("to hit saving target: ",
                                   style: TextStyle(
-                                      fontSize: 14
+                                      fontSize: width * 0.035
                                   )
                               );
                             }
                           }
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: height / 40),
                       FutureBuilder(
                           future: SpentDatabase.instance.getOverUnderSpent(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
@@ -528,7 +539,7 @@ class _Analytics extends State<Analytics> {
                                 children: [
                                   Text("leftover: ",
                                       style: TextStyle(
-                                          fontSize: 14
+                                          fontSize: width * 0.035
                                       )
                                   ),
                                   Spacer(),
@@ -538,7 +549,8 @@ class _Analytics extends State<Analytics> {
                                         Color.fromRGBO(50, 205, 50, 1)
                                           : (snapshot.data! < 0) ?
                                         Color.fromRGBO(221, 0, 4, 1)
-                                          : MyApp.theme[MyApp.selectedTheme]!["text"]
+                                          : MyApp.theme[MyApp.selectedTheme]!["text"],
+                                      fontSize: width * 0.035
                                     )
                                   )
                                 ],
@@ -548,17 +560,17 @@ class _Analytics extends State<Analytics> {
                                   "leftover: ",
                                   style: TextStyle(
                                       color: MyApp.theme[MyApp.selectedTheme]!["text"],
-                                      fontSize: 14
+                                      fontSize: width * 0.035
                                   )
                               );
                             }
                           }
                       ),
-                      SizedBox(height : 40),
+                      SizedBox(height : height / 40),
                     ],
                     crossAxisAlignment: CrossAxisAlignment.start,
                   ),
-                  margin: EdgeInsets.only(left : 90, right : 90)
+                  margin: EdgeInsets.only(left : width / 5, right : width / 5)
                 ),
                 FutureBuilder(
                     future : Future.wait([
@@ -571,35 +583,35 @@ class _Analytics extends State<Analytics> {
                         double spendPerDay = double.parse(snapshot.data![1].toStringAsFixed(1));
                         if (spents.isEmpty || spendPerDay.toInt() == 0) {
                           return Container(
-                              margin: EdgeInsets.only(left: 30, right: 30),
-                              decoration: BoxDecoration(
-                                color: MyApp.theme[MyApp.selectedTheme]!["text"],
-                                borderRadius: BorderRadius.circular(10)
-                              ),
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height / 2.5,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child : Text("Add in budget and a saving target first to see graph",
-                                  style: TextStyle(
-                                      color: Colors.white
-                                  ),
+                                margin: EdgeInsets.only(left: 30, right: 30),
+                                decoration: BoxDecoration(
+                                    color: MyApp.theme[MyApp.selectedTheme]!["text"],
+                                    borderRadius: BorderRadius.circular(10)
                                 ),
-                              )
+                                width: MediaQuery.of(context).size.width / 1.1,
+                                height: MediaQuery.of(context).size.height / 3,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child : Text("Add in budget and a saving target first to see graph",
+                                    style: TextStyle(
+                                        color: Colors.white
+                                    ),
+                                  ),
+                                )
                           );
                         } else {
                           return Container(
-                              padding: EdgeInsets.all(20),
-                              margin: EdgeInsets.only(left: 30, right: 30),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.blueAccent
-                                  ),
-                                  borderRadius: BorderRadius.circular(18)
-                              ),
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height / 2.5,
-                              child: lineChart(spents, spendPerDay)
+                                padding: EdgeInsets.all(20),
+                                margin: EdgeInsets.only(left: 30, right: 30),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.blueAccent
+                                    ),
+                                    borderRadius: BorderRadius.circular(18)
+                                ),
+                                width: MediaQuery.of(context).size.width / 1.1,
+                                height: MediaQuery.of(context).size.height / 3,
+                                child: lineChart(spents, spendPerDay)
                           );
                         }
                       } else {
@@ -857,7 +869,8 @@ class InputAmount extends StatelessWidget {
     ).animate(controller);
 
 
-  Widget inputAmount() {
+  Widget inputAmount(context) {
+    double textSize = MediaQuery.of(context).size.width / 16;
     return TextFormField(
         controller: amountController,
         keyboardType: TextInputType.numberWithOptions(
@@ -873,14 +886,14 @@ class InputAmount extends StatelessWidget {
         decoration: InputDecoration(
             hintText: 'Amount (1 D.P)',
             hintStyle: TextStyle(
-                color: MyApp.theme[MyApp.selectedTheme]!["hintText"]
+                color: MyApp.theme[MyApp.selectedTheme]!["hintText"],
+                fontSize: textSize
             ),
             border: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(
-                vertical: 20.0, horizontal: 10.0)
+
         ),
         style: TextStyle(
-            fontSize: 30,
+            fontSize: textSize,
             color: MyApp.theme[MyApp.selectedTheme]!["text"]
         ),
     );
@@ -892,13 +905,15 @@ class InputAmount extends StatelessWidget {
         animation : controller,
         builder : (context, child) {
           return Container(
-            width: 300,
+            width: MediaQuery.of(context).size.width / 1.4,
+            height: MediaQuery.of(context).size.height / 11,
             margin: EdgeInsets.only(
                 bottom: 50,
                 top: 30,
                 left: _offsetAnimation.value + 30.0,
                 right: 30.0 - _offsetAnimation.value
             ),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             decoration: BoxDecoration(
                 border: Border.all(
                     color: _colorAnimation.value,
@@ -909,7 +924,7 @@ class InputAmount extends StatelessWidget {
             child: child
           );
         },
-        child: inputAmount(),
+        child: inputAmount(context),
     );
   }
 }

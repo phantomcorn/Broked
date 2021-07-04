@@ -268,7 +268,7 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
             children: <Widget> [
               Container(
                 height: height / 15,
-                margin: EdgeInsets.fromLTRB(20, 20, 20, height / 8),
+                margin: EdgeInsets.fromLTRB(20, 20, 20, height / 7),
                 child : Row(
                   children: [
                     Spacer(),
@@ -278,7 +278,7 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
                 )
               ),
               Container(
-                width: MediaQuery.of(context).size.width / 2.5,
+                width: MediaQuery.of(context).size.width / 2.2,
                 height : height / 16,
                 child : datePicker()
               ),

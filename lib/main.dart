@@ -889,6 +889,7 @@ class InputAmount extends StatelessWidget {
                 color: MyApp.theme[MyApp.selectedTheme]!["hintText"],
                 fontSize: textSize
             ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             border: InputBorder.none,
 
         ),
@@ -913,7 +914,6 @@ class InputAmount extends StatelessWidget {
                 left: _offsetAnimation.value + 30.0,
                 right: 30.0 - _offsetAnimation.value
             ),
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             decoration: BoxDecoration(
                 border: Border.all(
                     color: _colorAnimation.value,
@@ -924,7 +924,10 @@ class InputAmount extends StatelessWidget {
             child: child
           );
         },
-        child: inputAmount(context),
+        child: Align(
+          alignment: Alignment.center,
+          child: inputAmount(context) ,
+        )
     );
   }
 }

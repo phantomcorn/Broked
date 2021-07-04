@@ -268,41 +268,17 @@ class SpentDatabase {
 
 
 
-  Future<double> getOverUnderSpent() async {
-    return await getBudgetThisMonth() - await getSpendingThisMonth();
+  Future<double> getOverUnderSpent(DateTime date) async {
+    return await getBudgetByDate(date) - await getTotalSpendingMonthly(date.month);
   }
 
-  Future<double> getBudgetThisMonth() async {
-    return await getBudgetByDate(DateTime.now());
+  Future<double> getAvgSpending(DateTime date) async {
+    return await getTotalSpendingMonthly(date.month) / numOfDaysInMonth(date);
   }
 
-  Future<double> getTargetThisMonth() async {
-    return await getTargetByDate(DateTime.now());
-  }
-
-  Future<double> getSpendingToday() async {
-    return await getSpendingByDate(DateTime.now());
-  }
-
-  Future<double> getSpendingThisMonth () async {
-    return await getTotalSpendingMonthly(DateTime.now().month);
-  }
-
-  Future<List<Spent>> getAllSpentThisMonth () async {
-    return await getAllSpentInAMonth(DateTime.now().month);
-  }
-
-  Future<double> getSpendingThisYear () async {
-    return await getTotalSpendingYearly(DateTime.now().year);
-  }
-
-  Future<double> getAvgSpending() async {
-    return await getTotalSpendingMonthly(DateTime.now().month) / numOfDaysInMonth(DateTime.now());
-  }
-
-  Future<double> getSpendingPerDayToHitTarget() async {
-    final availToSpend = await getBudgetThisMonth() - await getTargetThisMonth();
-    return availToSpend / numOfDaysInMonth(DateTime.now());
+  Future<double> getSpendingPerDayToHitTarget(DateTime date) async {
+    final availToSpend = await getBudgetByDate(date) - await getTargetByDate(date);
+    return availToSpend / numOfDaysInMonth(date);
   }
 
 }

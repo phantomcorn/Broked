@@ -301,6 +301,8 @@ class Analytics extends StatefulWidget {
 
 class _Analytics extends State<Analytics> {
 
+  DateTime _date = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -344,7 +346,7 @@ class _Analytics extends State<Analytics> {
                           margin: EdgeInsets.only(bottom : 40)
                       ),
                       FutureBuilder(
-                          future: SpentDatabase.instance.getBudgetThisMonth(),
+                          future: SpentDatabase.instance.getBudgetByDate(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -374,7 +376,7 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: SpentDatabase.instance.getSpendingToday(),
+                          future: SpentDatabase.instance.getSpendingByDate(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -403,7 +405,7 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: SpentDatabase.instance.getSpendingThisMonth(),
+                          future: SpentDatabase.instance.getSpendingByDate(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -432,7 +434,7 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: SpentDatabase.instance.getAvgSpending(),
+                          future: SpentDatabase.instance.getAvgSpending(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -461,7 +463,7 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: SpentDatabase.instance.getTargetThisMonth(),
+                          future: SpentDatabase.instance.getTargetByDate(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -490,7 +492,7 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: SpentDatabase.instance.getSpendingPerDayToHitTarget(),
+                          future: SpentDatabase.instance.getSpendingPerDayToHitTarget(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -519,7 +521,7 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: 20),
                       FutureBuilder(
-                          future: SpentDatabase.instance.getOverUnderSpent(),
+                          future: SpentDatabase.instance.getOverUnderSpent(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(
@@ -560,8 +562,8 @@ class _Analytics extends State<Analytics> {
                 ),
                 FutureBuilder(
                     future : Future.wait([
-                      SpentDatabase.instance.getAllSpentThisMonth(),
-                      SpentDatabase.instance.getSpendingPerDayToHitTarget()
+                      SpentDatabase.instance.getAllSpentInAMonth(_date.month),
+                      SpentDatabase.instance.getSpendingPerDayToHitTarget(_date)
                     ]),
                     builder : (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
                       if (snapshot.hasData) {
@@ -575,7 +577,7 @@ class _Analytics extends State<Analytics> {
                                 borderRadius: BorderRadius.circular(10)
                               ),
                               width: MediaQuery.of(context).size.width,
-                              height: 300,
+                              height: MediaQuery.of(context).size.height / 2.5,
                               child: Align(
                                 alignment: Alignment.center,
                                 child : Text("Add in budget and a saving target first to see graph",
@@ -595,11 +597,8 @@ class _Analytics extends State<Analytics> {
                                   ),
                                   borderRadius: BorderRadius.circular(18)
                               ),
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
-                              height: 300,
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height / 2.5,
                               child: lineChart(spents, spendPerDay)
                           );
                         }

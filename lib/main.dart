@@ -338,7 +338,7 @@ class _Analytics extends State<Analytics> {
                             ),
                             elevation: 0,
                             backgroundColor: Colors.white,
-                            child: resetDialog(context),
+                            child: resetDialog(context, width, height),
                           );
                         }
                       );
@@ -766,11 +766,11 @@ class _Analytics extends State<Analytics> {
     );
   }
 
-  Widget resetDialog(context) {
+  Widget resetDialog(BuildContext context, double width, double height) {
     return Stack(
       children: <Widget>[
         Container (
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(width / 35),
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               color: Colors.white,
@@ -783,22 +783,24 @@ class _Analytics extends State<Analytics> {
                 ),
               ]
           ),
-          width: MediaQuery.of(context).size.height / 1.5,
-          height : MediaQuery.of(context).size.width / 2,
+          width: width / 1.1,
+          height : height / 4,
           child : Column(
             children: [
               Text("Reset Database",
                 style: TextStyle(
-                  color: Colors.black
+                  color: Colors.black,
+                  fontSize: width * 0.04
                 )
               ),
-              SizedBox(height : 25),
+              SizedBox(height : height / 22),
               Text("All input data you've previously entered will be erased. Are you sure?",
                 style: TextStyle(
-                  color: Colors.black
+                  color: Colors.black,
+                  fontSize: width * 0.036
                 )
               ),
-              SizedBox(height : 40),
+              SizedBox(height : height / 20),
               Row(
                 children: [
                   AnimatedButton(
@@ -815,8 +817,8 @@ class _Analytics extends State<Analytics> {
                         )
                       ),
                       color: MyApp.theme[MyApp.selectedTheme]!["deleteYes"]!,
-                      width: 100,
-                      height: 32
+                      width: width / 4,
+                      height: height / 30
                   ),
                   AnimatedButton(
                       onPressed: () {
@@ -829,13 +831,14 @@ class _Analytics extends State<Analytics> {
                         )
                       ),
                       color: MyApp.theme[MyApp.selectedTheme]!["deleteNo"]!,
-                      width: 100,
-                      height: 32
+                      width: width / 4,
+                      height: height / 30
                   )
                 ],
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               )
             ],
+            mainAxisAlignment: MainAxisAlignment.center,
           ),
         )
       ],
@@ -951,9 +954,11 @@ class _LessBrokeState extends State<LessBroke> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Container(
-        width: MediaQuery.of(context).size.height / 1.5,
-        height : MediaQuery.of(context).size.width / 1.5,
+        width: width / 1.1,
+        height : height / 3.4,
         child : Stack(
             children : [
               PageView(
@@ -961,8 +966,8 @@ class _LessBrokeState extends State<LessBroke> {
                   controller: pageController,
                   scrollDirection: Axis.horizontal,
                   children: [
-                    budget(context),
-                    savingTarget(context)
+                    budget(context, width, height),
+                    savingTarget(context, width, height)
                   ]
               )
             ]
@@ -970,7 +975,7 @@ class _LessBrokeState extends State<LessBroke> {
     );
   }
 
-  Widget inputBudget() {
+  Widget inputBudget(BuildContext context) {
     return TextFormField(
       controller: budgetController,
       keyboardType: TextInputType.numberWithOptions(
@@ -987,22 +992,22 @@ class _LessBrokeState extends State<LessBroke> {
           hintText: "Budget",
           hintStyle: TextStyle(
               color : Colors.black,
-              fontSize: 25
+              fontSize: MediaQuery.of(context).size.width * 0.06
           ),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0)
       ),
       style: TextStyle(
-          fontSize: 30,
+          fontSize: MediaQuery.of(context).size.width * 0.06,
           color: Colors.black
       ),
     );
   }
 
 
-  Widget budget(context) {
+  Widget budget(BuildContext context, double width, double height) {
     return Container(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(width / 35),
         decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             color: Colors.white,
@@ -1021,12 +1026,12 @@ class _LessBrokeState extends State<LessBroke> {
                 "Enter budget for this month",
                 style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20
+                    fontSize: width * 0.045
                 )
             ),
-            SizedBox(height : 40),
-            inputBudget(),
-            SizedBox(height : 50),
+            SizedBox(height : height / 29),
+            inputBudget(context),
+            SizedBox(height : height / 25),
             AnimatedButton(
                 onPressed: () async {
                   if (budgetController.text != '') {
@@ -1048,18 +1053,18 @@ class _LessBrokeState extends State<LessBroke> {
                         color: MyApp.theme[MyApp.selectedTheme]!["buttonText"]
                     )
                 ),
-                width: 100,
-                height: 32
+                width: width / 4,
+                height: height / 25
             )
           ],
+          mainAxisAlignment: MainAxisAlignment.center,
         )
     );
   }
 
-  Widget savingTarget(context) {
+  Widget savingTarget(BuildContext context, double width, double height) {
     if (sliderValue != null && budgetController.text != '') {
       return Container(
-          padding: EdgeInsets.zero,
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               color: Colors.white,
@@ -1075,18 +1080,24 @@ class _LessBrokeState extends State<LessBroke> {
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.only(bottom : 10),
+                margin: EdgeInsets.only(bottom : width / 35, top : width / 50),
+                height: height / 30,
                 child : Row(
                   children: [
-                    IconButton(
-                      icon : Icon(Icons.arrow_back),
-                      onPressed: () {
-                        pageController.animateToPage(0,
-                            duration: Duration(milliseconds: 200),
-                            curve: Curves.easeInExpo
-                        );
-                      },
+                    Align(
+                      alignment: Alignment.center,
+                      child: IconButton(
+                        icon : Icon(Icons.arrow_back),
+                        iconSize: width / 20,
+                        onPressed: () {
+                          pageController.animateToPage(0,
+                              duration: Duration(milliseconds: 200),
+                              curve: Curves.easeInExpo
+                          );
+                        },
+                      ),
                     ),
+
                     Spacer(),
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1098,18 +1109,18 @@ class _LessBrokeState extends State<LessBroke> {
                     "Savings target for this month",
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: 20
+                        fontSize: width * 0.042
                     ),
-                )
+                ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: height / 40),
               Container(
                   margin: EdgeInsets.only(left : 10, right : 10),
                   child : Text(
                       sliderValue!.toStringAsFixed(1),
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 23
+                        fontSize: width * 0.045
                       ),
                   ),
               ),
@@ -1122,11 +1133,12 @@ class _LessBrokeState extends State<LessBroke> {
                       sliderValue = value;
                     });
                   },
+                  divisions: 5,
                   min: 0,
                   max: double.parse(budgetController.text),
                 )
               ),
-              SizedBox(height: 15),
+              SizedBox(height: height / 60),
               AnimatedButton(
                   onPressed: () async {
                     await SpentDatabase.instance.addBudgetAndTarget(
@@ -1143,10 +1155,11 @@ class _LessBrokeState extends State<LessBroke> {
                           color: MyApp.theme[MyApp.selectedTheme]!["buttonText"]
                       )
                   ),
-                  width: 100,
-                  height: 32
+                  width: width / 4,
+                  height: height / 28
               )
             ],
+            mainAxisAlignment: MainAxisAlignment.start,
           )
       );
     } else {

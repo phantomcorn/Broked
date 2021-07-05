@@ -634,7 +634,10 @@ class _Analytics extends State<Analytics> {
     double maxDayInSpent = spents.map((spent) => spent.date.day).reduce(max).toDouble();
 
     List<HorizontalLine> spendingPerDay = [
-      HorizontalLine(y: spendPerDay)
+      HorizontalLine(
+          y: spendPerDay,
+          color: Colors.blueAccent,
+      )
     ];
 
     List<FlSpot> coordinates = [];
@@ -670,7 +673,7 @@ class _Analytics extends State<Analytics> {
                 : minSpent.floorToDouble(),
             maxY: (maxSpent.ceilToDouble() > spendPerDay)
                 ? maxSpent.ceilToDouble() + 1
-                : spendPerDay.ceilToDouble() * 10,
+                : spendPerDay.ceilToDouble() * 5,
             minX: 1,
             maxX: maxDayInSpent,
             lineBarsData: [
@@ -689,7 +692,7 @@ class _Analytics extends State<Analytics> {
                       fontSize: 14,
                     );
                     return LineTooltipItem(
-                      "${touchedSpot.x.toInt()}/$monthYear : ${touchedSpot.y}",
+                      "${touchedSpot.x.toInt()}/$monthYear : \n ${touchedSpot.y}",
                       textStyle
                     );
                   }).toList();

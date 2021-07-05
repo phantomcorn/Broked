@@ -581,37 +581,37 @@ class _Analytics extends State<Analytics> {
                       if (snapshot.hasData) {
                         List<Spent> spents = snapshot.data![0];
                         double spendPerDay = double.parse(snapshot.data![1].toStringAsFixed(1));
-                        if (spents.isEmpty || spendPerDay.toInt() == 0) {
+                        if (spents.isNotEmpty || spendPerDay != 0) {
                           return Container(
-                                margin: EdgeInsets.only(left: 30, right: 30),
-                                decoration: BoxDecoration(
-                                    color: MyApp.theme[MyApp.selectedTheme]!["text"],
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                width: MediaQuery.of(context).size.width / 1.1,
-                                height: MediaQuery.of(context).size.height / 3,
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child : Text("Add in budget and a saving target first to see graph",
-                                    style: TextStyle(
-                                        color: Colors.white
-                                    ),
+                              padding: EdgeInsets.all(20),
+                              margin: EdgeInsets.only(left: 30, right: 30),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.blueAccent
                                   ),
-                                )
+                                  borderRadius: BorderRadius.circular(18)
+                              ),
+                              width: MediaQuery.of(context).size.width / 1.1,
+                              height: MediaQuery.of(context).size.height / 3,
+                              child: lineChart(spents, spendPerDay)
                           );
                         } else {
                           return Container(
-                                padding: EdgeInsets.all(20),
-                                margin: EdgeInsets.only(left: 30, right: 30),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.blueAccent
-                                    ),
-                                    borderRadius: BorderRadius.circular(18)
+                              margin: EdgeInsets.only(left: 30, right: 30),
+                              decoration: BoxDecoration(
+                                  color: MyApp.theme[MyApp.selectedTheme]!["text"],
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                              width: MediaQuery.of(context).size.width / 1.1,
+                              height: MediaQuery.of(context).size.height / 3,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child : Text("Add in budget and a saving target first to see graph",
+                                  style: TextStyle(
+                                      color: Colors.white
+                                  ),
                                 ),
-                                width: MediaQuery.of(context).size.width / 1.1,
-                                height: MediaQuery.of(context).size.height / 3,
-                                child: lineChart(spents, spendPerDay)
+                              )
                           );
                         }
                       } else {

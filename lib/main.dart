@@ -42,6 +42,9 @@ class MyApp extends StatelessWidget {
       "navBar" : Colors.white,
       "navSelected" : Color.fromRGBO(105, 105, 105, 1),
       "grid" : Color.fromRGBO(211, 211, 211, 1),
+      "graphBorder" : Color.fromRGBO(211, 211, 211, 1),
+      "lineColor" : Color.fromRGBO(128, 128, 128, 1),
+      "spotsColor" : Color.fromRGBO(105, 105, 105, 1),
       "soundDef" : "greyDefault.mp3",
       "soundSucc" : "greySucc.mp3"
     },
@@ -61,6 +64,9 @@ class MyApp extends StatelessWidget {
       "navBar" : Colors.black,
       "navSelected" : Color.fromRGBO(224, 231, 34, 1),
       "grid" : Color.fromRGBO(224,231,34, 1),
+      "graphBorder" : Color.fromRGBO(224,231,34, 1),
+      "lineColor" : Color.fromRGBO(254, 1, 254, 1),
+      "spotsColor" : Color.fromRGBO(0, 255, 255, 1),
       "soundDef" : "retroDefault.wav",
       "soundSucc" : "retroSucc.wav"
     }
@@ -587,7 +593,7 @@ class _Analytics extends State<Analytics> {
                               margin: EdgeInsets.only(left: 30, right: 30),
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Colors.blueAccent
+                                      color: MyApp.theme[MyApp.selectedTheme]!["graphBorder"]
                                   ),
                                   borderRadius: BorderRadius.circular(18)
                               ),
@@ -679,7 +685,17 @@ class _Analytics extends State<Analytics> {
             lineBarsData: [
               LineChartBarData(
                   spots: coordinates,
-                  barWidth: 2
+                  barWidth: 2,
+                  colors: [MyApp.theme[MyApp.selectedTheme]!["lineColor"]],
+                  dotData: FlDotData(
+                    show : true,
+                    getDotPainter: (spot, percent, barData, index) {
+                      return FlDotCrossPainter(
+                        width: 2,
+                        color: MyApp.theme[MyApp.selectedTheme]!["spotsColor"],
+                      );
+                    }
+                  )
               )
             ],
             lineTouchData: LineTouchData(

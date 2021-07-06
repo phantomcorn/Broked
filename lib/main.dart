@@ -995,7 +995,19 @@ class _LessBrokeState extends State<LessBroke> {
                   ]
               )
             ]
-        )
+        ),
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+                color: MyApp.theme[MyApp.selectedTheme]!["dialogShadow"],
+                offset: Offset(0,10),
+                blurRadius: 10
+            )
+          ]
+        ),
     );
   }
 
@@ -1032,18 +1044,6 @@ class _LessBrokeState extends State<LessBroke> {
   Widget budget(BuildContext context, double width, double height) {
     return Container(
         padding: EdgeInsets.all(width / 35),
-        decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                  color: MyApp.theme[MyApp.selectedTheme]!["dialogShadow"],
-                  offset: Offset(0,10),
-                  blurRadius: 10
-              )
-            ]
-        ),
         child : Column(
           children: [
             Text(
@@ -1089,18 +1089,6 @@ class _LessBrokeState extends State<LessBroke> {
   Widget savingTarget(BuildContext context, double width, double height) {
     if (sliderValue != null && budgetController.text != '') {
       return Container(
-          decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                    color: MyApp.theme[MyApp.selectedTheme]!["dialogShadow"],
-                    offset: Offset(0, 10),
-                    blurRadius: 10
-                )
-              ]
-          ),
           child: Column(
             children: [
               Container(

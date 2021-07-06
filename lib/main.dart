@@ -1077,6 +1077,7 @@ class _LessBrokeState extends State<LessBroke> {
                         color: MyApp.theme[MyApp.selectedTheme]!["buttonText"]
                     )
                 ),
+                color:  MyApp.theme[MyApp.selectedTheme]!["budgetButton"],
                 width: width / 4,
                 height: height / 25
             )
@@ -1167,6 +1168,7 @@ class _LessBrokeState extends State<LessBroke> {
                           color: MyApp.theme[MyApp.selectedTheme]!["buttonText"]
                       )
                   ),
+                  color: MyApp.theme[MyApp.selectedTheme]!["budgetButton"],
                   width: width / 4,
                   height: height / 28
               )

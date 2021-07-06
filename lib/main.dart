@@ -614,7 +614,8 @@ class _Analytics extends State<Analytics> {
                                 alignment: Alignment.center,
                                 child : Text("Add in budget and a saving target first to see graph",
                                   style: TextStyle(
-                                      color: Colors.white
+                                      color: Colors.white,
+                                      fontSize: width * 0.035
                                   ),
                                 ),
                               )

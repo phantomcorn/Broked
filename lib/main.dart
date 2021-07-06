@@ -589,27 +589,27 @@ class _Analytics extends State<Analytics> {
                         double spendPerDay = double.parse(snapshot.data![1].toStringAsFixed(1));
                         if (spents.isNotEmpty || spendPerDay != 0) {
                           return Container(
-                              padding: EdgeInsets.all(20),
-                              margin: EdgeInsets.only(left: 30, right: 30),
+                              padding: EdgeInsets.fromLTRB(width / 20 ,width / 13, width / 13, width / 20),
+                              margin: EdgeInsets.symmetric(horizontal: width / 13),
                               decoration: BoxDecoration(
                                   border: Border.all(
                                       color: MyApp.theme[MyApp.selectedTheme]!["graphBorder"]
                                   ),
                                   borderRadius: BorderRadius.circular(18)
                               ),
-                              width: MediaQuery.of(context).size.width / 1.1,
-                              height: MediaQuery.of(context).size.height / 3,
+                              width: width / 1.1,
+                              height: height / 3,
                               child: lineChart(spents, spendPerDay)
                           );
                         } else {
                           return Container(
-                              margin: EdgeInsets.only(left: 30, right: 30),
+                              margin: EdgeInsets.symmetric(horizontal: width / 13),
                               decoration: BoxDecoration(
                                   color: MyApp.theme[MyApp.selectedTheme]!["text"],
                                   borderRadius: BorderRadius.circular(10)
                               ),
-                              width: MediaQuery.of(context).size.width / 1.1,
-                              height: MediaQuery.of(context).size.height / 3,
+                              width: width / 1.1,
+                              height: height / 3,
                               child: Align(
                                 alignment: Alignment.center,
                                 child : Text("Add in budget and a saving target first to see graph",
@@ -723,7 +723,7 @@ class _Analytics extends State<Analytics> {
               show: true,
               bottomTitles: SideTitles(
                 showTitles: true,
-                reservedSize: 22,
+                reservedSize: 15,
                 getTextStyles: (value) => TextStyle(
                     color: MyApp.theme[MyApp.selectedTheme]!["text"],
                     fontSize: 10
@@ -742,7 +742,7 @@ class _Analytics extends State<Analytics> {
                   color: MyApp.theme[MyApp.selectedTheme]!["text"],
                   fontSize: 10
                 ),
-                reservedSize: 28,
+                reservedSize: 22,
                 margin: 8,
               ),
             ),
@@ -752,31 +752,35 @@ class _Analytics extends State<Analytics> {
                 titleText: "Spent",
                 textStyle: TextStyle(
                   color : MyApp.theme[MyApp.selectedTheme]!["text"],
-                  fontWeight: FontWeight.bold
-                )
+                  fontWeight: FontWeight.bold,
+                  fontSize: MediaQuery.of(context).size.width * 0.037
+                ),
+                margin: 6
               ),
               bottomTitle: AxisTitle(
                   showTitle: true,
                   titleText: "Day",
                   textStyle: TextStyle(
                       color : MyApp.theme[MyApp.selectedTheme]!["text"],
-                      fontWeight: FontWeight.bold
-                  )
+                      fontWeight: FontWeight.bold,
+                      fontSize : MediaQuery.of(context).size.width * 0.037
+                  ),
+                  margin: 6
               )
             ),
             borderData: FlBorderData(
-              border : const Border(
+              border : Border(
                 bottom: BorderSide(
-                  color: Colors.black,
+                  color: MyApp.theme[MyApp.selectedTheme]!["grid"],
                 ),
                 left: BorderSide(
-                  color: Colors.black,
+                  color: MyApp.theme[MyApp.selectedTheme]!["grid"],
                 ),
                 right: BorderSide(
-                  color: Colors.black,
+                  color: MyApp.theme[MyApp.selectedTheme]!["grid"],
                 ),
                 top: BorderSide(
-                  color: Colors.black,
+                  color: MyApp.theme[MyApp.selectedTheme]!["grid"],
                 ),
               ),
             )

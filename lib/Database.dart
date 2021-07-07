@@ -290,15 +290,16 @@ class SpentDatabase {
   }
 
   Future<List<DateTime>> getExistingMonthInSpentThisYear() async {
+    DateTime now = DateTime.now();
     List<DateTime> availDate = [];
     for (int month = 1 ; month <= noOfMonths.toInt() ; month ++) {
       var result = await getAllSpentByMonthThisYear(month);
-      if (result.isNotEmpty) {
-        var monthYear = DateTime(DateTime.now().year, month, 1);
+      if (result.isNotEmpty && month != now.month) {
+        var monthYear = DateTime(now.year, month, 1);
         availDate.add(DateTime(monthYear.year, month , numOfDaysInMonth(monthYear)));
-        print(DateTime(monthYear.year, month , numOfDaysInMonth(monthYear)));
       }
     }
+    availDate.add(now);
     return availDate;
   }
 

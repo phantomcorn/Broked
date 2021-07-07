@@ -289,10 +289,9 @@ class SpentDatabase {
     return availToSpend / numOfDaysInMonth(date);
   }
 
-  //used in selecting dates in analytics only
-  //does not include the CURRENT MONTH
-  //CURRENT MONTH is added later in FutureBuilder
-  Future<List<DateTime>> getExistingLastDateOfMonthThisYear() async {
+  //all previous months are stored as DateTime of the last day of that particular month
+  //the current month is stored as DateTime of the current date
+  Future<List<DateTime>> getExistingMonthInSpentThisYear() async {
     DateTime now = DateTime.now();
     List<DateTime> availDate = [];
     for (int month = 1 ; month <= noOfMonths.toInt() ; month ++) {
@@ -302,6 +301,7 @@ class SpentDatabase {
         availDate.add(DateTime(monthYear.year, month , numOfDaysInMonth(monthYear)));
       }
     }
+    availDate.add(DateTime(now.year,now.month,now.day));
     return availDate;
   }
 

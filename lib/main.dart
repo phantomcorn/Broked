@@ -422,7 +422,7 @@ class _Analytics extends State<Analytics> {
                       ),
                       SizedBox(height: height / 40),
                       FutureBuilder(
-                          future: SpentDatabase.instance.getSpendingByDate(_date),
+                          future: SpentDatabase.instance.getTotalSpendingMonthly(_date.month),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
                             if (snapshot.hasData) {
                               return Row(

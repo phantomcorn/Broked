@@ -102,7 +102,11 @@ class SpentDatabase {
 
   int numOfDaysInMonth(DateTime date) {
     //handles date.month + 1 > 12 case
-    return DateTime(date.year, date.month + 1, 0).day;
+    return lastDayInMonth(date).day;
+  }
+  
+  DateTime lastDayInMonth(DateTime date) {
+    return DateTime(date.year, date.month + 1, 0);
   }
   
   Future<void> deleteAllRecords() async {

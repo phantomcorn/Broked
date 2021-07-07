@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:intl/intl.dart';
@@ -102,10 +101,10 @@ class SpentDatabase {
 
   int numOfDaysInMonth(DateTime date) {
     //handles date.month + 1 > 12 case
-    return lastDayInMonth(date).day;
+    return lastDateOfMonth(date).day;
   }
   
-  DateTime lastDayInMonth(DateTime date) {
+  DateTime lastDateOfMonth(DateTime date) {
     return DateTime(date.year, date.month + 1, 0);
   }
   
@@ -172,7 +171,7 @@ class SpentDatabase {
     );
   }
 
-  Future<List<Spent>> getAllSpentInAMonth(int month) async {
+  Future<List<Spent>> getAllSpentByMonthYear(int month, int year) async {
     final db = await instance.database;
     String monthStr;
     if (month < 10) {
@@ -185,11 +184,17 @@ class SpentDatabase {
         "SELECT * "
         "FROM spent "
         "WHERE strftime('%m', date) = '$monthStr'"
+        "AND strftime('%Y', date) = '$year'"
         "ORDER BY date(date)"
     );
 
     return results.map((map) => Spent.fromMap(map)).toList();
   }
+
+  Future<List<Spent>> getAllSpentByMonthThisYear(int month) async {
+    return await getAllSpentByMonthYear(month, DateTime.now().year);
+  }
+
 
 
   Future<double> getTotalSpendingYearly(int year) async {
@@ -212,8 +217,7 @@ class SpentDatabase {
   }
 
   Future<double> getTotalSpendingMonthly(int month) async {
-    final db = await instance.database;
-    final results = await getAllSpentInAMonth(month);
+    final results = await getAllSpentByMonthThisYear(month);
 
     if (results.isEmpty) {
       return 0;
@@ -284,5 +288,19 @@ class SpentDatabase {
     final availToSpend = await getBudgetByDate(date) - await getTargetByDate(date);
     return availToSpend / numOfDaysInMonth(date);
   }
+
+  Future<List<DateTime>> getExistingMonthInSpentThisYear() async {
+    List<DateTime> availDate = [];
+    for (int month = 1 ; month <= noOfMonths.toInt() ; month ++) {
+      var result = await getAllSpentByMonthThisYear(month);
+      if (result.isNotEmpty) {
+        var monthYear = DateTime(DateTime.now().year, month, 1);
+        availDate.add(DateTime(monthYear.year, month , numOfDaysInMonth(monthYear)));
+        print(DateTime(monthYear.year, month , numOfDaysInMonth(monthYear)));
+      }
+    }
+    return availDate;
+  }
+
 
 }

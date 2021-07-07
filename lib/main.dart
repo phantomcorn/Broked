@@ -580,7 +580,7 @@ class _Analytics extends State<Analytics> {
                 ),
                 FutureBuilder(
                     future : Future.wait([
-                      SpentDatabase.instance.getAllSpentInAMonth(_date.month),
+                      SpentDatabase.instance.getAllSpentByMonthThisYear(_date.month),
                       SpentDatabase.instance.getSpendingPerDayToHitTarget(_date)
                     ]),
                     builder : (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {

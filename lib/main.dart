@@ -9,6 +9,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:fl_chart/fl_chart.dart';
 import "Database.dart";
 import "Theme.dart";
+import 'Utils.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -307,6 +308,7 @@ class _BrokeMain extends State<BrokeMain> with SingleTickerProviderStateMixin {
 
 
 class Analytics extends StatefulWidget {
+
   const Analytics({ Key? key}) : super(key: key);
 
   @override
@@ -316,8 +318,17 @@ class Analytics extends StatefulWidget {
 
 class _Analytics extends State<Analytics> {
 
-  DateTime _date = DateTime.now();
 
+  DateTime now = DateTime.now();
+  late DateTime _date;
+  //String dropdownDate = "${Utils.monthToString(DateTime.now().month)} ${DateTime.now().year}";
+
+  @override
+  void initState() {
+    _date = DateTime(now.year, now.month, now.day);
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -352,16 +363,73 @@ class _Analytics extends State<Analytics> {
                   )
                 ),
                 Container(
+                  child : Row(
+                    children: [
+                      Text("analytics",
+                          style: TextStyle(
+                              fontSize: width * 0.04
+                          )
+                      ),
+                      FutureBuilder(
+                          future: SpentDatabase.instance.getExistingMonthInSpentThisYear(),
+                          builder: (BuildContext context, AsyncSnapshot<List<DateTime>> snapshot) {
+                            if (snapshot.hasData) {
+
+                                var items =  snapshot.data!
+                                    .map<DropdownMenuItem<DateTime>>((DateTime date) {
+                                      return DropdownMenuItem<DateTime>(
+                                        value: date,
+                                        child: Text(
+                                          "${Utils.monthToString(date.month)} ${date.year}",
+                                          style: TextStyle(
+                                            color: MyApp.theme[MyApp
+                                                .selectedTheme]!["text"],
+                                            fontSize: width * 0.04
+                                          )
+                                        ),
+                                      );
+                                    }).toList();
+
+                                
+                                return DropdownButton<DateTime>(
+                                    value: _date,
+                                    items: items,
+                                    onChanged: (DateTime? newDate) {
+                                      setState(() {
+                                        _date = newDate!;
+                                      });
+                                    },
+                                );
+                            } else {
+                              return DropdownButton(
+                                items: [
+                                  DropdownMenuItem(
+                                      value : _date,
+                                      child: Text(
+                                          "now",
+                                          style: TextStyle(
+                                              color: MyApp.theme[MyApp.selectedTheme]!["text"],
+                                              fontSize: width * 0.04
+                                          )
+                                      )
+                                  )
+                                ],
+                              );
+                            }
+                          }
+                      )
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                  margin: EdgeInsets.only(
+                      bottom : height / 30,
+                      left: width / 10,
+                      right: width / 10
+                  )
+                ),
+                Container(
                   child : Column(
                     children: [
-                      Container(
-                          child : Text("analytics",
-                              style: TextStyle(
-                                  fontSize: width * 0.04
-                              )
-                          ),
-                          margin: EdgeInsets.only(bottom : height / 30)
-                      ),
                       FutureBuilder(
                           future: SpentDatabase.instance.getBudgetByDate(_date),
                           builder: (BuildContext context, AsyncSnapshot<double> snapshot) {

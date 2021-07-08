@@ -296,12 +296,16 @@ class SpentDatabase {
     List<DateTime> availDate = [];
     for (int month = 1 ; month <= noOfMonths.toInt() ; month ++) {
       var result = await getAllSpentByMonthThisYear(month);
-      if (result.isNotEmpty && month != now.month) {
-        var monthYear = DateTime(now.year, month, 1);
-        availDate.add(DateTime(monthYear.year, month , numOfDaysInMonth(monthYear)));
+      if (result.isNotEmpty) {
+        if (month == now.month) {
+          availDate.add(DateTime(now.year,now.month,now.day));
+        } else {
+          var monthYear = DateTime(now.year, month, 1);
+          availDate.add(DateTime(monthYear.year, month , numOfDaysInMonth(monthYear)));
+        }
       }
     }
-    availDate.add(DateTime(now.year,now.month,now.day));
+
     return availDate;
   }
 

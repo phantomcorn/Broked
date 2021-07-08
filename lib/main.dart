@@ -375,21 +375,23 @@ class _Analytics extends State<Analytics> {
                           builder: (BuildContext context, AsyncSnapshot<List<DateTime>> snapshot) {
                             if (snapshot.hasData) {
                               if (snapshot.data!.isEmpty) {
-                                return DropdownButton(
-                                  value: null,
-                                  items: [
-                                    DropdownMenuItem(
-                                      value: null,
-                                      child: Text(
-                                          "${Utils.monthToString(_date.month)} ${_date.year}",
-                                          style: TextStyle(
-                                              color: MyApp.theme[MyApp
-                                                  .selectedTheme]!["text"],
-                                              fontSize: width * 0.04
-                                          )
+                                return DropdownButtonHideUnderline(
+                                  child : DropdownButton(
+                                    value: null,
+                                    items: [
+                                      DropdownMenuItem(
+                                        value: null,
+                                        child: Text(
+                                            "${Utils.monthToString(_date.month)} ${_date.year}",
+                                            style: TextStyle(
+                                                color: MyApp.theme[MyApp
+                                                    .selectedTheme]!["text"],
+                                                fontSize: width * 0.04
+                                            )
+                                        )
                                       )
-                                    )
-                                  ]
+                                    ]
+                                  )
                                 );
                               }
                                 var items =  snapshot.data!
@@ -408,29 +410,33 @@ class _Analytics extends State<Analytics> {
                                     }).toList();
 
 
-                                return DropdownButton<DateTime>(
-                                    value: _date,
-                                    items: items,
-                                    onChanged: (DateTime? newDate) {
-                                      setState(() {
-                                        _date = newDate!;
-                                      });
-                                    },
+                                return DropdownButtonHideUnderline(
+                                  child : DropdownButton<DateTime>(
+                                      value: _date,
+                                      items: items,
+                                      onChanged: (DateTime? newDate) {
+                                        setState(() {
+                                          _date = newDate!;
+                                        });
+                                      },
+                                  )
                                 );
                             } else {
-                              return DropdownButton(
-                                items: [
-                                  DropdownMenuItem(
-                                      value : _date,
-                                      child: Text(
-                                          "now",
-                                          style: TextStyle(
-                                              color: MyApp.theme[MyApp.selectedTheme]!["text"],
-                                              fontSize: width * 0.04
-                                          )
-                                      )
-                                  )
-                                ],
+                              return DropdownButtonHideUnderline(
+                                child : DropdownButton(
+                                  items: [
+                                    DropdownMenuItem(
+                                        value : _date,
+                                        child: Text(
+                                            "now",
+                                            style: TextStyle(
+                                                color: MyApp.theme[MyApp.selectedTheme]!["text"],
+                                                fontSize: width * 0.04
+                                            )
+                                        )
+                                    )
+                                  ],
+                                )
                               );
                             }
                           }
@@ -439,7 +445,7 @@ class _Analytics extends State<Analytics> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   ),
                   margin: EdgeInsets.only(
-                      bottom : height / 30,
+                      bottom : height / 100,
                       left: width / 10,
                       right: width / 10
                   )
@@ -663,6 +669,7 @@ class _Analytics extends State<Analytics> {
                   ),
                   margin: EdgeInsets.only(left : width / 5, right : width / 5)
                 ),
+                SizedBox(height : height / 100),
                 FutureBuilder(
                     future : Future.wait([
                       SpentDatabase.instance.getAllSpentByMonthThisYear(_date.month),

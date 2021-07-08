@@ -374,7 +374,24 @@ class _Analytics extends State<Analytics> {
                           future: SpentDatabase.instance.getExistingMonthInSpentThisYear(),
                           builder: (BuildContext context, AsyncSnapshot<List<DateTime>> snapshot) {
                             if (snapshot.hasData) {
-
+                              if (snapshot.data!.isEmpty) {
+                                return DropdownButton(
+                                  value: null,
+                                  items: [
+                                    DropdownMenuItem(
+                                      value: null,
+                                      child: Text(
+                                          "${Utils.monthToString(_date.month)} ${_date.year}",
+                                          style: TextStyle(
+                                              color: MyApp.theme[MyApp
+                                                  .selectedTheme]!["text"],
+                                              fontSize: width * 0.04
+                                          )
+                                      )
+                                    )
+                                  ]
+                                );
+                              }
                                 var items =  snapshot.data!
                                     .map<DropdownMenuItem<DateTime>>((DateTime date) {
                                       return DropdownMenuItem<DateTime>(
@@ -390,7 +407,7 @@ class _Analytics extends State<Analytics> {
                                       );
                                     }).toList();
 
-                                
+
                                 return DropdownButton<DateTime>(
                                     value: _date,
                                     items: items,

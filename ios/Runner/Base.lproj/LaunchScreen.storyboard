@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -14,24 +15,59 @@
                         <viewControllerLayoutGuide type="bottom" id="xbc-2k-c8Z"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YRO-k0-Ey4">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="YRO-k0-Ey4">
+                                <rect key="frame" x="207" y="448" width="0.5" height="0.5"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="broke_text" translatesAutoresizingMaskIntoConstraints="NO" id="pi8-ui-orA">
+                                <rect key="frame" x="59" y="551" width="265" height="158"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="158" id="eaR-jA-OQD"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="broked" translatesAutoresizingMaskIntoConstraints="NO" id="h0d-yE-Qi8">
+                                <rect key="frame" x="44" y="170" width="326" height="355"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="355" id="bNK-vh-ApU"/>
+                                    <constraint firstAttribute="width" constant="326" id="rMJ-A8-fAw"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="d_text" translatesAutoresizingMaskIntoConstraints="NO" id="mL9-UD-0aY">
+                                <rect key="frame" x="189" y="427" width="294" height="236"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="236" id="PBA-fB-ofQ"/>
+                                    <constraint firstAttribute="width" constant="294" id="Zha-OK-E7a"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="YRO-k0-Ey4" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="1a2-6s-vTC"/>
-                            <constraint firstItem="YRO-k0-Ey4" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="4X2-HB-R7a"/>
+                            <constraint firstAttribute="bottom" secondItem="mL9-UD-0aY" secondAttribute="bottom" constant="233" id="14n-qQ-07Y"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="pi8-ui-orA" secondAttribute="trailing" constant="70" id="5Ai-O5-rJ3"/>
+                            <constraint firstItem="xbc-2k-c8Z" firstAttribute="top" secondItem="mL9-UD-0aY" secondAttribute="bottom" constant="199" id="5bR-rK-2Yh"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="h0d-yE-Qi8" secondAttribute="bottom" constant="337" id="7vK-oe-pQ6"/>
+                            <constraint firstItem="mL9-UD-0aY" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" constant="427" id="8U7-JK-Xdq"/>
+                            <constraint firstItem="xbc-2k-c8Z" firstAttribute="top" secondItem="pi8-ui-orA" secondAttribute="bottom" constant="153" id="Q7s-eK-Txa"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="mL9-UD-0aY" secondAttribute="trailing" constant="-89" id="YJs-OS-qPz"/>
+                            <constraint firstItem="pi8-ui-orA" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="39" id="fY1-dn-hcp"/>
+                            <constraint firstItem="h0d-yE-Qi8" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="topMargin" constant="126" id="iC9-nc-Jva"/>
+                            <constraint firstItem="h0d-yE-Qi8" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="qpz-MO-dJr"/>
+                            <constraint firstItem="pi8-ui-orA" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="topMargin" constant="507" id="zQc-JV-xw7"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="279.71014492753625" y="198.21428571428569"/>
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchImage" width="168" height="185"/>
+        <image name="LaunchImage" width="0.5" height="0.5"/>
+        <image name="broke_text" width="2048" height="2048"/>
+        <image name="broked" width="2048" height="2048"/>
+        <image name="d_text" width="2048" height="2048"/>
     </resources>
 </document>

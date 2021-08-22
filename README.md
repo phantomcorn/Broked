@@ -25,3 +25,16 @@ To run this on xcode:
 2. run ```flutter build ios```
 3. launch on xcode
 4. run
+
+
+
+in case error :
+```
+broked/ios/Pods/Target Support Files/audioplayers/audioplayers-umbrella.h:13:9: error: 'AudioplayersPlugin X.h' file not found
+    #import "AudioplayersPlugin X.h"
+```
+
+remove ```#import "AudioplayersPlugin X.h``` from ```broked/ios/Pods/Target\ Support\ Files/audioplayers/audioplayers-umbrella.h``` except ```#import "AudioplayersPlugin.h"```
+
+
+

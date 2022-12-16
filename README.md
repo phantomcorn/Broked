@@ -1,3 +1,5 @@
+[DEMO](https://youtube.com/shorts/HwFZy7ydrKM)
+
 This app was created in order to track budgets. 
 The creator had a curiousity whether his money actually disappeared into thin air so he created this app in order to test out the following theorem.
 
